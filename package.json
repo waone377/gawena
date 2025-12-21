@@ -14,7 +14,7 @@
     "refactor"
   ],
   "author": "waone",
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "dependencies": {
     "@google/genai": "^0.12.0",
@@ -23,3 +23,4 @@
     "prompt-sync": "^4.2.0"
   }
 }
+
