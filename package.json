@@ -1,0 +1,25 @@
+{
+  "name": "gawena",
+  "version": "1.1.0",
+  "description": "Alat generator kode dan perbaikan kode proyek bertenaga AI.",
+  "main": "src/_app.js",
+  "scripts": {
+    "start": "node src/_app.js"
+  },
+  "keywords": [
+    "generator",
+    "kode",
+    "gemini",
+    "ai",
+    "refactor"
+  ],
+  "author": "waone",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@google/genai": "^0.12.0",
+    "dotenv": "^16.5.0",
+    "fast-glob": "^3.3.3",
+    "prompt-sync": "^4.2.0"
+  }
+}
