@@ -13,7 +13,7 @@ async function perbaikan() {
     const { dataTarget } = await data();
 
     if (dataTarget) {
-      Print.clear("target history:\n", dataTarget);
+      Print.clear("riwayat target history:\n", dataTarget);
       const pake = Masukan.pilih(
         "gunakan lokasi repository terakhir tersebut (y/n)?> ",
         ["y", "n"],

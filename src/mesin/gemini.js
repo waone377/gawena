@@ -1,5 +1,5 @@
 import configGenAi from "./configurasi.js";
-import { tulisFile, data } from "../util/files.js";
+import { tulisFile, bacaFile, data } from "../util/files.js";
 import Masukan from "../util/input.js";
 import Print from "../util/tampilan.js";
 const panduanPath = "src/dok/dokumentasi.txt";
@@ -29,29 +29,32 @@ async function genAi(prompt) {
           ]);
           if (pakeHistory === "y") isHistory = true;
         }
-        pakePanduan = Masukan.pilih("gunakan file panduan (y/n)?> ", [
-          "y",
-          "n",
-        ]);
-        if (pakePanduan === "y") {
-          Print.clear("mencerna panduan...");
-          const eee = await AI.files.upload({
-            file: panduanPath,
-            displayName: panduanName,
-          });
-          msg.push({
-            fileData: {
-              mimeType: eee.mimeType,
-              fileUri: eee.uri,
-            },
-          });
+        const valuePanduan = await bacaFile(panduanPath);
+        if (valuePanduan !== "") {
+          pakePanduan = Masukan.pilih("gunakan file panduan (y/n)?> ", [
+            "y",
+            "n",
+          ]);
+          if (pakePanduan === "y") {
+            Print.clear("mencerna panduan...");
+            const eee = await AI.files.upload({
+              file: panduanPath,
+              displayName: panduanName,
+            });
+            msg.push({
+              fileData: {
+                mimeType: eee.mimeType,
+                fileUri: eee.uri,
+              },
+            });
+          }
         }
       }
 
       Print.clear("memproses permintaan silakan tunggu...");
       const respons = await model.sendMessage({ message: msg });
       result = JSON.parse(respons.text);
-      const resData = JSON.stringify(result, null, 2);
+      const resData = respons.text;
       Print.clear("Laporan:\n***\n", result.text, "\n***");
       history.push({
         role: "user",
@@ -69,7 +72,7 @@ async function genAi(prompt) {
         break;
       } else {
         const q = Masukan.wajib("apa yang ingin di betulkan?> ");
-        msg[0].text = `outputnya masih kurang ${q} silakan revisi kembali`;
+        msg[0].text = `kurang tepat ${q} silakan revisi kembali`;
         isHistory = true;
         tambahan = false;
       }

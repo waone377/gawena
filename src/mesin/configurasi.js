@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import "dotenv/config";
-import schema from "./schema.js";
+import mainSchema from "./schema.js";
 import { data } from "../util/files.js";
 
 async function configGenAi(isHistory = false) {
@@ -22,7 +22,7 @@ async function configGenAi(isHistory = false) {
         },
         tools: [],
         responseMimeType: "application/json",
-        responseSchema: schema,
+        responseSchema: mainSchema,
         generationConfig: {
           maxOutputTokens: process.env.MAX_OUTPUT,
           presencePenalty: 8,

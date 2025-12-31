@@ -12,9 +12,8 @@ import Masukan from "../util/input.js";
 async function generateRepo(source, mode) {
   try {
     const { dataTarget } = await data();
-    const letak = dataTarget;
     const lokasi = path.join(path.resolve("."), "output");
-    let base = lokasi;
+    let base = "";
     if (mode === "pembuatan") {
       const nameRepo = Masukan.wajib("masukkan nama repository?> ");
       base = path.join(lokasi, nameRepo);
@@ -30,13 +29,13 @@ async function generateRepo(source, mode) {
         base = path.join(lokasi, nameRepo);
         await buatFolder(base);
       }
-      base = letak;
+      base = dataTarget;
     }
     const dir = base.split("/").pop();
     Print.clear(mode, "\nvolder:", dir, "\npath:", base, "\n===");
     if (source.delets.length > 0 && mode === "perbaikan") {
       for (const e of source.delets) {
-        const p = path.join(path.resolve(base), e.lokasi);
+        const p = path.normalize(path.join(path.resolve(base), e.lokasi));
         switch (e.jenis) {
           case "folder":
             await hapusFolder(p);
@@ -47,15 +46,18 @@ async function generateRepo(source, mode) {
             Print.log("menghapus file", e.lokasi);
             break;
           default:
-            Print.log("ada satu source yang tidak valid untuk dihapus!");
+            Print.log(
+              "ada satu source yang tidak valid untuk dihapus!",
+              e.lokasi,
+            );
             break;
         }
       }
     }
     // di luar kondisi delets
-    if (source.repo) {
+    if (source.repo.length > 0) {
       for (const e of source.repo) {
-        const p = path.join(path.resolve(base), e.lokasi);
+        const p = path.normalize(path.join(path.resolve(base), e.lokasi));
         switch (e.jenis) {
           case "folder":
             await buatFolder(p);
