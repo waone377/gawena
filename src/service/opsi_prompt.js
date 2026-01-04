@@ -48,5 +48,28 @@ class Prompt {
       throw new Error(`Prompt.perbaikan() error: ${err.message}`);
     }
   }
+  static async duplikat() {
+    try {
+      const { dataPrompt } = await data();
+      const pakePrompt = Masukan.pilih("gunakan prompt.txt (y/n)?> ", [
+        "y",
+        "n",
+      ]);
+      let prompt = "";
+      if (pakePrompt === "y") {
+        prompt = dataPrompt;
+        Print.clear("isi prompt:\n***", prompt || "kosong", "\n***");
+        const next = Masukan.pilih("lanjutkan (y/n)?> ", ["y", "n"]);
+        if (next === "n") {
+          prompt = Masukan.wajib("apa yang ingin dimodifikasi?> ");
+        }
+      } else {
+        prompt = Masukan.wajib("apa yang ingin dimodifikasi?> ");
+      }
+      return prompt;
+    } catch (err) {
+      throw new Error(`Prompt.duplikat() error: ${err.message}`);
+    }
+  }
 }
 export default Prompt;

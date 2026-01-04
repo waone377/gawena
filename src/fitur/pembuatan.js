@@ -5,7 +5,8 @@ import Prompt from "../service/opsi_prompt.js";
 
 async function pembuatan() {
   try {
-    const prompt = await Prompt.pembuatan();
+    const q = await Prompt.pembuatan();
+    const prompt = `konteksnya PEMBUATAN\n:${q}`;
     const res = await genAi(prompt);
     await generateRepo(res, "pembuatan");
   } catch (err) {

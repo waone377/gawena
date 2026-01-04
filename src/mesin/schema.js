@@ -13,12 +13,12 @@ const repoItemSchema = {
       type: Type.STRING,
       description:
         "Path relatif dari root proyek (tanpa menyertakan nama repository). Gunakan '/' sebagai pemisah direktori. Contoh yang benar: 'src/components/Button.jsx'. Jangan gunakan path absolut.",
-      pattern: "^[a-zA-Z0-9._\\-/]+$",
+      pattern: "^[a-zA-Z0-9._\-/]+$",
     },
     konten: {
       type: Type.STRING,
       description:
-        "Isi lengkap file sesuai lokasi. Jika jenis bernilai 'folder', konten WAJIB berupa string kosong ''. Untuk jenis selain folder, konten harus berisi seluruh isi file secara utuh.",
+        "Isi lengkap file sesuai lokasi. Jika jenis bernilai 'folder', konten WAJIB berupa string kosong ''. Untuk jenis selain folder, konten harus berisi seluruh isi file secara utuh, tidak perlu komentar kode atau teks yang tidak berguna.",
     },
   },
   required: ["jenis", "lokasi", "konten"],
@@ -37,7 +37,7 @@ const deleteItemSchema = {
       type: Type.STRING,
       description:
         "Path relatif dari root proyek untuk file atau folder yang dihapus. Tidak boleh menyertakan nama repository dan harus sesuai struktur proyek.",
-      pattern: "^[a-zA-Z0-9._\\-/]+$",
+      pattern: "^[a-zA-Z0-9._\-/]+$",
     },
   },
   required: ["jenis", "lokasi"],
@@ -49,7 +49,7 @@ const mainSchema = {
     repo: {
       type: Type.ARRAY,
       description:
-        "Daftar semua file dan folder yang dibuat atau dimodifikasi oleh AI pada respons ini. Jangan sertakan file atau folder yang tidak mengalami perubahan.",
+        "Daftar semua file dan folder yang dibuat, dimodifikasi, atau diduplikat oleh AI pada respons ini. Jangan sertakan file atau folder yang tidak mengalami perubahan jika tugasnya disuruh untuk memperbaiki dan utamakan pembuatan folder terlebih dahulu atau direktori, tapi jika konteksnya adalah duplikat Anda harus menyalin semua file dan folder yang ada di repository walaupun tidak ada perubahan.",
       items: repoItemSchema,
     },
     delets: {

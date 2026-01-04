@@ -6,6 +6,7 @@ Gawena adalah sebuah alat baris perintah (CLI) untuk membantu developer memperce
 
 - **Pembuatan Proyek Baru**: Hasilkan seluruh struktur folder dan file untuk proyek baru (misalnya, "buatkan saya API server Express dengan TypeScript") hanya dengan satu perintah.
 - **Refactoring & Perbaikan Proyek**: Analisis kode proyek yang ada dan terapkan perubahan, tambahkan fitur baru, atau perbaiki bug sesuai instruksi Anda.
+- **Duplikasi & Modifikasi Proyek**: Buat salinan lengkap proyek yang ada, terapkan modifikasi, dan simpan sebagai proyek baru.
 - **Pembacaan Proyek Selektif**: Kontrol penuh atas file mana yang dianalisis oleh AI, dengan mode inklusi (hanya baca yang dipilih) atau eksklusi (abaikan yang dipilih).
 - **Riwayat Percakapan Berkonteks**: Menyimpan dan menggunakan kembali riwayat interaksi dengan AI, memungkinkan Anda untuk melakukan koreksi berulang hingga hasil yang diinginkan tercapai.
 - **Konfigurasi Fleksibel**: Mudah untuk mengkonfigurasi model AI, temperature, dan parameter lainnya melalui file `.env`.
@@ -84,7 +85,17 @@ Digunakan untuk memodifikasi, menambah fitur, atau memperbaiki kode pada proyek 
     - **Timpa project asli**: Menerapkan perubahan langsung ke proyek sumber.
     - **Membuat project baru**: Menyimpan versi yang telah diperbaiki sebagai proyek baru di dalam direktori `output/`.
 
-### Mode 3: Hapus Riwayat
+### Mode 3: Duplikat Project
+
+Gunakan mode ini untuk membuat salinan lengkap dari proyek yang sudah ada, sekaligus menerapkan modifikasi berdasarkan instruksi Anda.
+
+1.  Pilih menu `3`.
+2.  Masukkan path ke direktori proyek yang akan diduplikat. Aplikasi akan mengingat path terakhir yang Anda gunakan.
+3.  Tentukan apakah akan menggunakan `prompt.txt` untuk deskripsi modifikasi yang detail atau mengetik langsung di terminal.
+4.  Setelah AI memproses permintaan, masukkan nama untuk folder proyek hasil duplikasi dan modifikasi baru.
+5.  Proyek akan dibuat di dalam direktori `output/<nama-proyek-baru>`.
+
+### Mode 4: Hapus Riwayat
 
 Opsi ini akan menghapus semua riwayat percakapan yang tersimpan di `history/riwayat.json` untuk memulai sesi baru yang bersih.
 
@@ -98,6 +109,7 @@ Opsi ini akan menghapus semua riwayat percakapan yang tersimpan di `history/riwa
 - `src/fitur/`: Modul yang mengelola fitur utama aplikasi.
   - `pembuatan.js`: Mengelola logika untuk mode "Membuat Project Baru".
   - `perbaikan.js`: Mengelola logika untuk mode "Memperbaiki Project".
+  - `duplikat.js`: Mengelola logika untuk mode "Duplikat Project".
   - `penghapusan.js`: Mengelola logika untuk mode "Hapus Riwayat".
 - `src/mesin/`: Modul inti untuk interaksi dengan AI Gemini.
   - `configurasi.js`: Menginisialisasi model Google Gemini dengan konfigurasi dari `.env`.

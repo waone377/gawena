@@ -91,10 +91,10 @@ async function readRepo(target) {
     Print.clear("membaca...\nvolder:", dir, "\npath:", target, "\n===");
     let markdown = "";
     for (const e of repo) {
-      const relativePath = path.relative(target, e);
-      Print.log("sedang membaca", relativePath);
+      const p = path.relative(target, e);
+      Print.log("sedang membaca", p);
       const kode = await bacaFile(e, true);
-      markdown += `\n\n---\n\n*lokasi*\n\n${relativePath}\n\n*isi konten*\n\n${kode}\n\n---`;
+      markdown += `\n\n---\n\n*lokasi*\n\n${p}\n\n*isi konten*\n\n${kode}\n\n---`;
     }
     const echo = `nama repository: ${dir}
 path repository: ${target}

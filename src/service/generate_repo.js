@@ -9,33 +9,31 @@ import {
 } from "../util/files.js";
 import Print from "../util/tampilan.js";
 import Masukan from "../util/input.js";
+import os from "os";
 async function generateRepo(source, mode) {
   try {
     const { dataTarget } = await data();
-    const lokasi = path.join(path.resolve("."), "output");
+    const lokasi = path.join(
+      os.homedir(),
+      path.resolve("output").replace("/emulated/0", ""),
+    );
     let base = "";
     if (mode === "pembuatan") {
-      const nameRepo = Masukan.wajib("masukkan nama repository?> ");
+      const nameRepo = Masukan.wajib("masukkan nama project?> ");
+      base = path.join(lokasi, nameRepo);
+      await buatFolder(base);
+    } else if (mode === "perbaikan") {
+      base = dataTarget;
+    } else {
+      const nameRepo = Masukan.wajib("masukkan nama project baru?> ");
       base = path.join(lokasi, nameRepo);
       await buatFolder(base);
     }
-    if (mode === "perbaikan") {
-      const opsi = Masukan.pilih(
-        "pilih penyimpanan:\n1. timpa repository\n2. buat repository\nsilahkan pilih (1/2)?> ",
-        ["1", "2"],
-      );
-      if (opsi === "2") {
-        const nameRepo = Masukan.wajib("masukkan nama repository?> ");
-        base = path.join(lokasi, nameRepo);
-        await buatFolder(base);
-      }
-      base = dataTarget;
-    }
     const dir = base.split("/").pop();
-    Print.clear(mode, "\nvolder:", dir, "\npath:", base, "\n===");
+    Print.clear(mode, "\nvolder:", dir, "\npath:", base, "\n===\n");
     if (source.delets.length > 0 && mode === "perbaikan") {
       for (const e of source.delets) {
-        const p = path.normalize(path.join(path.resolve(base), e.lokasi));
+        const p = path.normalize(path.join(base, e.lokasi));
         switch (e.jenis) {
           case "folder":
             await hapusFolder(p);
@@ -55,31 +53,29 @@ async function generateRepo(source, mode) {
       }
     }
     // di luar kondisi delets
+    mode = mode === "duplikat" ? "modifikasi" : mode;
     if (source.repo.length > 0) {
       for (const e of source.repo) {
-        const p = path.normalize(path.join(path.resolve(base), e.lokasi));
+        const p = path.normalize(path.join(base, e.lokasi));
         switch (e.jenis) {
           case "folder":
             await buatFolder(p);
-            Print.log("membuat folder", e.lokasi);
+            Print.log(mode, "folder", e.lokasi, "succes");
             break;
           case "file":
             await tulisFile(p, e.konten);
-            Print.log("membuat file", e.lokasi);
+            Print.log(mode, "file", e.lokasi, "succes");
             break;
           case "config":
             await tulisFile(p, e.konten);
-            Print.log("membuat file", e.lokasi);
+            Print.log(mode, "file", e.lokasi, "succes");
             break;
           case "dok":
             await tulisFile(p, e.konten);
-            Print.log("membuat file", e.lokasi);
+            Print.log(mode, "file", e.lokasi, "succes");
             break;
           default:
-            Print.log(
-              "ada satu source yang tidak valid untuk dibuat!",
-              e.lokasi,
-            );
+            Print.log("ada satu source yang tidak valid untuk", mode, e.lokasi);
             break;
         }
       }

@@ -72,7 +72,7 @@ async function genAi(prompt) {
         break;
       } else {
         const q = Masukan.wajib("apa yang ingin di betulkan?> ");
-        msg[0].text = `kurang tepat ${q} silakan revisi kembali`;
+        msg[0].text = `konteksnya REFISI\n:${q}`;
         isHistory = true;
         tambahan = false;
       }

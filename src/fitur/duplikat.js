@@ -7,7 +7,7 @@ import Print from "../util/tampilan.js";
 import readRepo from "../service/read_repo.js";
 import generateRepo from "../service/generate_repo.js";
 import Prompt from "../service/opsi_prompt.js";
-async function perbaikan() {
+async function duplikat() {
   try {
     let target = "";
     const { dataTarget } = await data();
@@ -44,12 +44,12 @@ async function perbaikan() {
       JSON.stringify({ target: p }, null, 4),
     );
     const markdown = await readRepo(p);
-    const prompt = await Prompt.perbaikan();
-    const pesan = `konteksnya PERBAIKAN:\ncermatilah repositori project saya ini dengan teliti:${markdown}\n\n**tugasnya anda itu:**\n\n${prompt}`;
+    const prompt = await Prompt.duplikat();
+    const pesan = `konteksnya DUPLIKAT:\ncermatilah repositori project ini dengan teliti:${markdown}\n\n**tugasnya anda itu:\n${prompt}`;
     const res = await genAi(pesan);
-    await generateRepo(res, "perbaikan");
+    await generateRepo(res, "duplikat");
   } catch (err) {
-    throw new Error(`perbaikan() error: ${err.message}`);
+    throw new Error(`duplikat() error: ${err.message}`);
   }
 }
-export default perbaikan;
+export default duplikat;

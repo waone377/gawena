@@ -17,6 +17,8 @@ async function bacaFile(p, isJson = false) {
 
 async function tulisFile(p, data) {
   try {
+    const dir = path.dirname(p);
+    await buatFolder(dir);
     await fs.writeFile(p, data);
   } catch (err) {
     throw new Error(
@@ -116,12 +118,12 @@ async function cekAda(p) {
 async function data() {
   try {
     const dataHistory = await bacaFile("history/riwayat.json");
-    const targetData = await bacaFile("history/target.json");
+    const { target } = await bacaFile("history/target.json");
     const dataIntruksi = await bacaFile("src/dok/intruksi.txt");
     const dataPrompt = await bacaFile("prompt.txt");
     return {
       dataHistory,
-      dataTarget: targetData.target || "",
+      dataTarget: target || "",
       dataIntruksi,
       dataPrompt,
     };
