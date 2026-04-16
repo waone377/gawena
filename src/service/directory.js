@@ -14,10 +14,16 @@ function getPath(target) {
     const ignored = Masukan.wajib("silahkan?> ");
     const berkas = ignored.split(",");
     const ignore = berkas.map((e) => e.trim());
-    const defaultIgn = ["**/*.mp3", "node_modules/**", ".git/**", "dist/**"];
+    const defaultIgn = [
+      "**/*.mp3",
+      "node_modules/**",
+      ".git/**",
+      "dist/**",
+      ...ignore,
+    ];
     const paths = fg.sync("**/*", {
-      cwd: target,
-      ignore: [...ignore, ...defaultIgn],
+      cwd: target.replace("/music", "/Music"),
+      ignore: defaultIgn,
       onlyFiles: true,
       absolute: true,
     });

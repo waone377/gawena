@@ -3,7 +3,7 @@ function absolute(audit_dir, p) {
   try {
     const home = path.join(process.env.HOME, audit_dir);
     const finaly = path.join(home, p);
-    return finaly;
+    return finaly.replace("/music", "/Music");
   } catch (err) {
     throw new Error(`absolute: ${err.message}`);
   }

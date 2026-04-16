@@ -24,26 +24,26 @@ async function undo_project() {
       switch (eee.jenis) {
         case "folder":
           Dir.buat(lokasi);
-          Print.log(eee.jenis, " ", lokasi, " success created");
+          Print.log(eee.jenis, " ", lokasi, " success dipulihkan");
           break;
         case "config":
           Fs.tulis(lokasi, eee.konten);
-          Print.log(eee.jenis, " ", lokasi, " success created");
+          Print.log(eee.jenis, " ", lokasi, " success dipulihkan");
           break;
         case "file":
           Fs.tulis(lokasi, eee.konten);
-          Print.log(eee.jenis, " ", lokasi, " success created");
+          Print.log(eee.jenis, " ", lokasi, " success dipulihkan");
           break;
         case "dok":
           Fs.tulis(lokasi, eee.konten);
-          Print.log(eee.jenis, " ", lokasi, " success created");
+          Print.log(eee.jenis, " ", lokasi, " success dipulihkan");
           break;
         default:
-          Print.log(eee.jenis, " ", lokasi, " failed created!");
+          Print.log(eee.jenis, " ", lokasi, " failed dipulihkan!");
           break;
       }
     }
-    Print.log("pembuatan project success...");
+    Print.log("pemulihan project success...");
   } catch (err) {
     throw new Error(err.message);
   }

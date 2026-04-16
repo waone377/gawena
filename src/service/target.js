@@ -8,7 +8,7 @@ function targeter() {
     while (true) {
       lokasi = Masukan.wajib("lokasi directory target dari?> home/");
       try {
-        fs.accessSync(cwd(lokasi));
+        fs.accessSync(cwd(lokasi).replace("/music", "/Music"));
         break;
       } catch {
         Print.clear(cwd(lokasi), " tidak ditemukan!!!");
