@@ -1,1 +1,2 @@
-perbaiki readme.md sesuai project
+perbaiki isi pada file instruction.md hanya bagian duplikasi supaya model menulis kembali semua source code dan tidak menulis source code yang tidak perlu karena model benar-benar harus mengamati meniru dan memodifikasi bagian yang memang diperintahkan untuk dimodifikasi
+Dan perbaiki juga pada bagian deskripsi lokasi supaya model dilarang merubah lokasi project user jika konteksnya adalah perbaikan dan duplikasi kecuali ada permintaan khusus dari user untuk memindahkan menghapus atau menyalinnya

@@ -11,19 +11,17 @@ function getPath(target) {
     Print.log("format untuk file: **/example.zip");
     Print.log("format untuk extensi: **/*.txt");
     Print.log("pisahkan dengan koma(,)");
-    const ignored = Masukan.wajib("silahkan?> ");
-    const berkas = ignored.split(",");
-    const ignore = berkas.map((e) => e.trim());
-    const defaultIgn = [
-      "**/*.mp3",
-      "node_modules/**",
-      ".git/**",
-      "dist/**",
-      ...ignore,
-    ];
+    Print.log("kosongkan jika tidak ada");
+    const ignored = Masukan.biasa("silakan?> ");
+    let ign = ["**/*.mp3", "node_modules/**", ".git/**", "dist/**"];
+    if (ignored) {
+      const berkas = ignored.split(",");
+      const ignore = berkas.map((e) => e.trim());
+      ign = ["**/*.mp3", "node_modules/**", ".git/**", "dist/**", ...ignore];
+    }
     const paths = fg.sync("**/*", {
       cwd: target.replace("/music", "/Music"),
-      ignore: defaultIgn,
+      ignore: ign,
       onlyFiles: true,
       absolute: true,
     });

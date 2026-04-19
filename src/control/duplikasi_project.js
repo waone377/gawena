@@ -4,9 +4,10 @@ import { Fs, Dir } from "../util/file.js";
 import promptConfirm from "../service/prompt.js";
 import Print from "../util/console.js";
 import Masukan from "../util/masukan.js";
-import { absolute, cwd } from "../service/lokasi.js";
+import { cwd } from "../service/lokasi.js";
 import History from "../service/history.js";
 import targeter from "../service/target.js";
+import path from "path";
 let history_p = "history/duplikasi.json";
 async function duplikasi_project() {
   try {
@@ -26,28 +27,10 @@ async function duplikasi_project() {
     const { project, delets } = await mesinCall(
       "konteksnya duplikat serta modifikasi tugasmu: " + prompt + markdown,
     );
+    const dir_out = Masukan.wajib("masukan nama project baru?> ");
     Print.clear("sedang menduplikasi project...");
-    if (delets.length !== 0) {
-      for (const eee of delets) {
-        const lokasi = absolute(target, eee.lokasi);
-        switch (eee.jenis) {
-          case "folder":
-            Dir.hapus(lokasi);
-            Print.log(eee.jenis, " ", lokasi, " success deleted");
-            break;
-          case "file":
-            Fs.hapus(lokasi);
-            Print.log(eee.jenis, " ", lokasi, " success deleted");
-            break;
-          default:
-            Print.log(eee.jenis, " ", lokasi, " failed deleted");
-            break;
-        }
-      }
-      Print.log("penghapusan selesai...");
-    }
     for (const eee of project) {
-      const lokasi = absolute(target, eee.lokasi);
+      const lokasi = path.join("output", dir_out, eee.lokasi);
       switch (eee.jenis) {
         case "folder":
           Dir.buat(lokasi);

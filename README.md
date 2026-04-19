@@ -4,25 +4,25 @@ Gawena adalah sebuah alat berbasis command-line yang menggunakan kekuatan model 
 
 ## Fitur Utama
 
-*   **Buat Proyek Baru:** Hasilkan struktur proyek lengkap dari awal berdasarkan deskripsi yang Anda berikan kepada AI.
-*   **Perbaiki Proyek:** Perbaiki bug, tambahkan fitur, atau modifikasi kode pada proyek yang sudah ada berdasarkan instruksi.
-*   **Duplikasi & Modifikasi Proyek:** Salin seluruh struktur proyek yang ada, lalu terapkan modifikasi spesifik menggunakan AI.
-*   **Undo Project:** Kembalikan perubahan pada proyek ke kondisi sebelumnya melalui sistem riwayat.
-*   **Bersihkan Riwayat:** Hapus log riwayat operasi untuk menjaga kebersihan data.
+- **Buat Proyek Baru:** Hasilkan struktur proyek lengkap dari awal berdasarkan deskripsi yang Anda berikan kepada AI.
+- **Perbaiki Proyek:** Perbaiki bug, tambahkan fitur, atau modifikasi kode pada proyek yang sudah ada berdasarkan instruksi.
+- **Duplikasi & Modifikasi Proyek:** Salin seluruh struktur proyek yang ada, lalu terapkan modifikasi spesifik menggunakan AI.
+- **Undo Project:** Kembalikan perubahan pada proyek ke kondisi sebelumnya melalui sistem riwayat.
+- **Bersihkan Riwayat:** Hapus log riwayat operasi untuk menjaga kebersihan data.
 
 ## Teknologi yang Digunakan
 
-*   **Node.js:** Lingkungan runtime untuk eksekusi skrip.
-*   **Google Gemini API:** Model AI untuk pemrosesan bahasa alami dan pembuatan kode.
-*   **fast-glob:** Untuk pemindaian direktori.
-*   **prompt-sync:** Untuk interaksi pengguna melalui command-line.
+- **Node.js:** Lingkungan runtime untuk eksekusi skrip.
+- **Google Gemini API:** Model AI untuk pemrosesan bahasa alami dan pembuatan kode.
+- **fast-glob:** Untuk pemindaian direktori.
+- **prompt-sync:** Untuk interaksi pengguna melalui command-line.
 
 ## Prasyarat
 
 Sebelum menjalankan Gawena, pastikan Anda telah menginstal:
 
-*   **Node.js** (versi 18 atau lebih tinggi direkomendasikan).
-*   Kunci **API Google Gemini** yang valid.
+- **Node.js** (versi 18 atau lebih tinggi direkomendasikan).
+- Kunci **API Google Gemini** yang valid.
 
 ## Instalasi
 
@@ -73,9 +73,10 @@ Anda akan disajikan menu layanan. Ikuti instruksi di layar untuk memilih layanan
 ### Format Output AI
 
 AI dirancang untuk merespons dalam format JSON terstruktur yang mencakup:
-*   `project`: Daftar file dan folder yang dibuat/dimodifikasi.
-*   `delets`: Daftar file dan folder yang dihapus.
-*   `laporan`: Ringkasan teknis dari perubahan yang dilakukan.
+
+- `project`: Daftar file dan folder yang dibuat/dimodifikasi.
+- `delets`: Daftar file dan folder yang dihapus.
+- `laporan`: Ringkasan teknis dari perubahan yang dilakukan.
 
 Format ini diatur oleh skema yang ketat untuk memastikan konsistensi dan kemudahan pemrosesan oleh alat.
 

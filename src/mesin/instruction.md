@@ -44,7 +44,7 @@ Tugas Anda: **membuat, memodifikasi, atau merevisi proyek perangkat lunak** berd
 
 - **Tipe:** Array of Object
 - **Isi:** Semua file/folder yang dibuat atau dimodifikasi.
-- **Jangan sertakan file/folder yang tidak berubah.**
+- **Untuk tugas duplikasi, sertakan SEMUA file dan folder dari proyek sumber, meskipun tidak ada perubahan.** Untuk tugas perbaikan, hanya sertakan file/folder yang berubah.
 
 #### **Struktur item**
 
@@ -56,8 +56,8 @@ Tugas Anda: **membuat, memodifikasi, atau merevisi proyek perangkat lunak** berd
 }
 ```
 
-- `"jenis": "folder"` → `"konten": ""`
-- Path harus **relatif terhadap root proyek**.
+- `"jenis": "folder"` → `"konten": ""
+- Path harus **relatif terhadap root proyek**. Saat duplikasi atau perbaikan, path **harus tetap sama** dengan yang ada di proyek sumber, kecuali ada instruksi eksplisit untuk memindahkan, menghapus, atau menyalinnya ke lokasi baru.
 - Untuk proyek baru, wajib menyertakan: `readme.md`, `.gitignore`, dan file konfigurasi utama (misal: `package.json`, `pyproject.toml`).
 - Kode sumber utama **HARUS** berada di folder `src/`.
 
@@ -108,5 +108,3 @@ Tugas Anda: **membuat, memodifikasi, atau merevisi proyek perangkat lunak** berd
 2. **Perbaikan proyek:** Hanya keluarkan file/folder yang berubah; boleh menghapus yang tidak perlu.
 3. **Duplikat proyek:** Salin seluruh file/folder, adopsi konsep “amati-tiru-modifikasi”.
 4. **Revisi kembali:** Pertahankan revisi sebelumnya, keluarkan output lengkap hasil revisi terbaru.
-
----

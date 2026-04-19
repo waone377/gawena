@@ -3,7 +3,7 @@ import customSchema from "./schema.js";
 import { Fs, Dir } from "../util/file.js";
 import "dotenv/config";
 
-let instruction_p = "src/temporary/instruction.md";
+let instruction_p = "src/mesin/instruction.md";
 let apiKey = process.env.API_KEY_GEMINI;
 function LLM() {
   try {
