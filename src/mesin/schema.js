@@ -1,5 +1,6 @@
 import { Type } from "@google/genai";
 
+// ... mendefinisikan skema untuk item proyek (file/folder)
 const projectSchema = {
   type: Type.OBJECT,
   properties: {
@@ -24,6 +25,7 @@ const projectSchema = {
   required: ["jenis", "lokasi", "konten"],
 };
 
+// ... mendefinisikan skema untuk item yang dihapus
 const deleteSchema = {
   type: Type.OBJECT,
   properties: {
@@ -43,6 +45,7 @@ const deleteSchema = {
   required: ["jenis", "lokasi"],
 };
 
+// ... mendefinisikan skema utama untuk respons AI (project, delets, laporan)
 const customSchema = {
   type: Type.OBJECT,
   properties: {

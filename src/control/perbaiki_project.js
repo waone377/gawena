@@ -7,27 +7,40 @@ import Masukan from "../util/masukan.js";
 import { absolute, cwd } from "../service/lokasi.js";
 import History from "../service/history.js";
 import targeter from "../service/target.js";
+
 let history_p = "history/perbaiki.json";
 async function perbaiki_project() {
+  // ... memulai blok try-catch untuk penanganan error
   try {
+    // ... mendapatkan riwayat operasi perbaikan sebelumnya
     const h = History.get(history_p, { set: false, target: "" });
     let target = h.target;
+    // ... jika tidak ada riwayat yang valid, minta target directory dari pengguna
     if (!h.set) {
       target = targeter();
     }
+    // ... mendapatkan path absolut dari target directory
     const repo = cwd(target);
+    // ... membaca struktur direktori target dan menyimpannya sebagai markdown
     const markdown = directory(repo);
+    // ... menyimpan target directory yang digunakan untuk riwayat
     History.save(history_p, { set: true, target });
+    // ... memeriksa apakah prompt.txt valid untuk digunakan
     const p = promptConfirm();
     let prompt = p.text;
+    // ... jika prompt.txt tidak valid atau tidak digunakan, minta input prompt secara langsung
     if (!p.cek) {
       prompt = Masukan.wajib("apa yang ingin diperbaiki pada project?> ");
     }
+    // ... memanggil API Gemini untuk memperbaiki project
     const { project, delets } = await mesinCall(
       "konteksnya perbaiki tugasmu: " + prompt + markdown,
     );
+    // ... menampilkan pesan bahwa project sedang diperbaiki
     Print.clear("sedang memperbaiki project...");
+    // ... jika ada item yang dihapus dalam respons AI
     if (delets.length !== 0) {
+      // ... mengulang untuk menghapus file/folder yang ditandai untuk dihapus
       for (const eee of delets) {
         const lokasi = absolute(target, eee.lokasi);
         switch (eee.jenis) {
@@ -46,6 +59,7 @@ async function perbaiki_project() {
       }
       Print.log("penghapusan selesai...");
     }
+    // ... mengulang untuk membuat/memodifikasi file/folder
     for (const eee of project) {
       const lokasi = absolute(target, eee.lokasi);
       switch (eee.jenis) {
@@ -70,8 +84,10 @@ async function perbaiki_project() {
           break;
       }
     }
+    // ... menampilkan pesan bahwa perbaikan project telah berhasil
     Print.log("perbaikan project success...");
   } catch (err) {
+    // ... menangkap dan melempar kembali error jika terjadi masalah
     throw new Error(err.message);
   }
 }

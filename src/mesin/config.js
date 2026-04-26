@@ -5,10 +5,16 @@ import "dotenv/config";
 
 let instruction_p = "src/mesin/instruction.md";
 let apiKey = process.env.API_KEY_GEMINI;
+
+// ... inisialisasi dan konfigurasi model Gemini AI
 function LLM() {
+  // ... memulai blok try-catch untuk penanganan error
   try {
+    // ... membaca instruksi sistem dari file
     const instruction = Fs.baca(instruction_p, "");
+    // ... membuat instance GoogleGenAI dengan API key
     const AI = new GoogleGenAI({ apiKey });
+    // ... membuat chat session dengan model yang dikonfigurasi
     const model = AI.chats.create({
       model: process.env.MODEL,
       config: {
@@ -30,8 +36,10 @@ function LLM() {
       },
       history: [],
     });
+    // ... mengembalikan objek model dan AI
     return { model, AI };
   } catch (err) {
+    // ... menangkap dan melempar kembali error jika terjadi masalah
     throw new Error(`LLM: ${err.message}`);
   }
 }

@@ -1,2 +1,37 @@
-perbaiki isi pada file instruction.md hanya bagian duplikasi supaya model menulis kembali semua source code dan tidak menulis source code yang tidak perlu karena model benar-benar harus mengamati meniru dan memodifikasi bagian yang memang diperintahkan untuk dimodifikasi
-Dan perbaiki juga pada bagian deskripsi lokasi supaya model dilarang merubah lokasi project user jika konteksnya adalah perbaikan dan duplikasi kecuali ada permintaan khusus dari user untuk memindahkan menghapus atau menyalinnya
+tambahkan komentar kode, di setiap scope blok kode di atas sesuai fungsinya wajib gunakan '//' komentar jangan '/*' dan di awal kalimat gunakan ... 
+contoh:
+import buatkan_project from "./control/buatkan_project.js";
+import perbaiki_project from "./control/perbaiki_project.js";
+import duplikasi_project from "./control/duplikasi_project.js";
+import undo_project from "./control/undo_project.js";
+import history_clear from "./control/history_clear.js";
+import Print from "./util/console.js";
+import Masukan from "./util/masukan.js";
+// ... menampilkan text opsi pilih
+Print.clear("pilih service:");
+Print.log("1. buatkan project");
+Print.log("2. perbaiki project");
+Print.log("3. duplikasi project");
+Print.log("4. undo project");
+Print.log("5. clear history");
+// ... meminta data opsi pilih
+const opsi = Masukan.pilih("service?", ["1", "2", "3", "4", "5"]);
+// ...lojik opsi pilih
+switch (opsi) {
+  case "1":
+    buatkan_project();
+    break;
+  case "2":
+    perbaiki_project();
+    break;
+  case "3":
+    duplikasi_project();
+    break;
+  case "4":
+    undo_project();
+    break;
+  case "5":
+    history_clear();
+    break;
+}
+seperti itu contohnya
