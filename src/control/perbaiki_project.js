@@ -7,24 +7,23 @@ import Masukan from "../util/masukan.js";
 import { absolute, cwd } from "../service/lokasi.js";
 import History from "../service/history.js";
 import targeter from "../service/target.js";
-
-let history_p = "history/perbaiki.json";
+import history_p from "../util/lokasi.js";
 async function perbaiki_project() {
   // ... memulai blok try-catch untuk penanganan error
   try {
     // ... mendapatkan riwayat operasi perbaikan sebelumnya
-    const h = History.get(history_p, { set: false, target: "" });
+    const h = History.get(history_p.perbaiki, { set: false, target: "" });
     let target = h.target;
     // ... jika tidak ada riwayat yang valid, minta target directory dari pengguna
     if (!h.set) {
       target = targeter();
     }
+    // ... menyimpan target directory yang digunakan untuk riwayat
+    History.save(history_p.perbaiki, { set: true, target });
     // ... mendapatkan path absolut dari target directory
     const repo = cwd(target);
     // ... membaca struktur direktori target dan menyimpannya sebagai markdown
     const markdown = directory(repo);
-    // ... menyimpan target directory yang digunakan untuk riwayat
-    History.save(history_p, { set: true, target });
     // ... memeriksa apakah prompt.txt valid untuk digunakan
     const p = promptConfirm();
     let prompt = p.text;

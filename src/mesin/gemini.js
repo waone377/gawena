@@ -3,7 +3,7 @@ import Print from "../util/console.js";
 import Masukan from "../util/masukan.js";
 import History from "../service/history.js";
 
-let history_p = "history/output.json";
+import history_p from "../util/lokasi.js";
 async function mesinCall(prompt) {
   // ... memulai blok try-catch untuk penanganan error
   try {
@@ -12,7 +12,7 @@ async function mesinCall(prompt) {
     let history = model.history;
     let message = prompt;
     // ... memeriksa riwayat percakapan sebelumnya dari file history umum
-    const h = History.get("history/history.json", "[]");
+    const h = History.get(history_p.historyModel, "[]");
     if (h.length !== 0) {
       Print.clear("total history: ", h.length / 2);
       // ... menanyakan pengguna apakah ingin menggunakan riwayat percakapan
@@ -31,7 +31,7 @@ async function mesinCall(prompt) {
       const { project, delets, laporan } = JSON.parse(result);
       Print.clear("laporan tugas:n", laporan);
       // ... menyimpan riwayat percakapan saat ini
-      History.save("history/history.json", model.history);
+      History.save(history_p.historyModel, model.history);
       // ... menanyakan pengguna apakah ingin merevisi hasil
       const next = Masukan.pilih("refisi kembali hasil?", ["y", "n"]);
       // ... jika ingin merevisi, minta input revisi dan lanjutkan loop
@@ -41,7 +41,7 @@ async function mesinCall(prompt) {
         continue;
       }
       // ... jika tidak ingin merevisi, simpan hasil akhir dan kembalikan
-      History.save(history_p, JSON.parse(result));
+      History.save(history_p.output, JSON.parse(result));
       return { project, delets };
     }
   } catch (err) {

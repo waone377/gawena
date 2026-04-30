@@ -4,12 +4,12 @@ import Masukan from "../util/masukan.js";
 import path from "path";
 import History from "../service/history.js";
 
-let history_p = "history/repository.json";
+import history_p from "../util/lokasi.js";
 async function undo_project() {
   // ... memulai blok try-catch untuk penanganan error
   try {
     // ... mendapatkan data riwayat pemulihan project
-    const { dir, project } = History.get(history_p, {
+    const { dir, project } = History.get(history_p.projectJson, {
       dir: "",
       project: [],
       delets: [],
@@ -17,10 +17,11 @@ async function undo_project() {
     });
     // ... jika tidak ada project dalam history, tampilkan pesan error dan keluar
     if (project.length === 0) {
-      Print.clear("file history/directory.json kosong!!!");
+      Print.clear("file", history_p.projectJson, "kosong!!!");
       process.exit(1);
     }
     // ... meminta konfirmasi untuk melanjutkan pemulihan
+    Print.clear("project lokasi:\n", dir);
     const next = Masukan.pilih("lanjut pulihkan?", ["y", "n"]);
     if (next === "n") process.exit(1);
     // ... menampilkan pesan bahwa pemulihan sedang berlangsung

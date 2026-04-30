@@ -4,6 +4,7 @@ import Print from "../util/console.js";
 import Masukan from "../util/masukan.js";
 import { cwd, potong } from "../service/lokasi.js";
 import History from "../service/history.js";
+import history_p from "../util/lokasi.js";
 
 // ... fungsi untuk mendapatkan path file dari direktori target dengan opsi ignore
 function getPath(target) {
@@ -49,7 +50,7 @@ function repositoryJson(paths, target) {
     laporan: "",
   };
   // ... menyimpan struktur project ke file history JSON
-  History.save("history/repo/repository.json", project);
+  History.save(history_p.projectJson, project);
 }
 // ...fungsi membuat repository.md
 
@@ -58,7 +59,7 @@ function repositoryMD(target, source) {
   const md_array = [head, ...source];
   const markdown = md_array.join("-----\n");
   // ... menulis markdown ke file
-  Fs.tulis("history/repo/repository.md", markdown);
+  Fs.tulis(history_p.projectMarkdown, markdown);
   return markdown;
 }
 

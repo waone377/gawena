@@ -35,3 +35,4 @@ switch (opsi) {
     history_clear();
     break;
 }
+Print.log("gawena berhenti...");
