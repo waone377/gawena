@@ -18,7 +18,7 @@ async function mesinCall(prompt) {
       // ... menanyakan pengguna apakah ingin menggunakan riwayat percakapan
       const isHistory = Masukan.pilih("gunakan history?", ["y", "n"]);
       if (isHistory === "y") {
-        model.history = h; // ... menggunakan riwayat jika dipilih
+        model.history = h.slice(-4); // ... menggunakan riwayat jika dipilih
       }
     }
     // ... loop untuk mengirim pesan dan menerima respons (memungkinkan revisi)
