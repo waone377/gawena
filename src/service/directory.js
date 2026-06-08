@@ -6,7 +6,7 @@ import { cwd, potong } from "../service/lokasi.js";
 import History from "../service/history.js";
 import history_p from "../util/lokasi.js";
 
-// ... fungsi untuk mendapatkan path file dari direktori target dengan opsi ignore
+// Memindai berkas di dalam direktori target dengan mengabaikan berkas yang dikecualikan
 function getPath(target) {
   try {
     Print.clear("masukan berkas yang ingin dikecualikan:");
@@ -23,7 +23,7 @@ function getPath(target) {
       const berkasClear = berkasArray.map((e) => e.trim());
       ignore = [...ignore, ...berkasClear];
     }
-    // ... menggunakan fast-glob untuk memindai file
+    // Menggunakan fast-glob untuk mendapatkan path file secara rekursif
     const paths = fg.sync("**/*", {
       cwd: target.replace("/music", "/Music"),
       ignore: ignore,
@@ -35,49 +35,49 @@ function getPath(target) {
     throw new Error(`getPath: ${err.message}`);
   }
 }
-// ... fungsi membuat struktur repository.json
+// Membuat dan menyimpan representasi JSON terstruktur dari seluruh isi direktori target
 function repositoryJson(paths, target) {
   const code = paths.map((e) => {
     const lokasi = potong(target, e);
     const value = Fs.baca(e, "");
     return { jenis: "file", lokasi: lokasi, konten: value };
   });
-  // ... menyiapkan objek project untuk disimpan di history
+  // Menyusun objek data proyek untuk riwayat pemulihan
   const project = {
     dir: target,
     project: code,
     delets: [],
     laporan: "",
   };
-  // ... menyimpan struktur project ke file history JSON
+  // Menyimpan data proyek ke file history JSON
   History.save(history_p.projectJson, project);
 }
-// ...fungsi membuat repository.md
+// Membuat representasi file markdown yang berisi seluruh kode sumber proyek
 
 function repositoryMD(target, source) {
-  const head = `\project lokasi: ${target}\n### source code:`;
+  const head = `\project lokasi: ${target}\n### source code:\n`;
   const md_array = [head, ...source];
   const markdown = md_array.join("-----\n");
-  // ... menulis markdown ke file
-  Fs.tulis(history_p.projectMarkdown, markdown);
-  return markdown;
+  // Menulis konten markdown ke berkas cadangan
+  Fs.tulis(history_p.projectMarkdown, markdown.trim());
+  return markdown.trim();
 }
 
-// ... fungsi untuk membaca struktur direktori target dan menyiapkannya untuk AI
+// Membaca struktur direktori secara utuh dan mengembalikannya dalam format markdown
 function directory(target) {
   try {
     const paths = getPath(target);
     Print.clear("sedang membaca directory...");
-    // ... membuat representasi string markdown dari setiap file
+    // Memetakan isi setiap berkas menjadi blok teks berformat markdown
     const source = paths.map((e) => {
       const lokasi = potong(target, e);
       Print.log("membaca ", lokasi);
       const value = Fs.baca(e, "");
       return `lokasi:\n${lokasi}\n\`\`\`\n${value}\`\`\` `;
     });
-    // ... membuat struktur file repository.json
+    // Menyimpan berkas proyek dalam format JSON untuk fitur undo
     repositoryJson(paths, target);
-    // ... menggabungkan header dan file-file menjadi format markdown
+    // Menghasilkan file dokumentasi markdown proyek
     const markdown = repositoryMD(target, source);
     return markdown;
   } catch (err) {

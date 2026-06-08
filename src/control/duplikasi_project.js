@@ -11,40 +11,43 @@ import path from "path";
 
 import history_p from "../util/lokasi.js";
 async function duplikasi_project() {
-  // ... memulai blok try-catch untuk penanganan error
+  // Membungkus proses duplikasi proyek dengan penanganan error
   try {
-    // ... mendapatkan riwayat operasi duplikasi sebelumnya
+    // Mengambil riwayat target direktori duplikasi sebelumnya
     const h = History.get(history_p.duplikasi, { set: false, target: "" });
     let target = h.target;
-    // ... jika tidak ada riwayat yang valid, minta target directory dari pengguna
+    // Jika tidak ada riwayat target, minta input direktori target dari pengguna
     if (!h.set) {
       target = targeter();
     }
-    // ... menyimpan target directory yang digunakan untuk riwayat
+    // Menyimpan direktori target terpilih ke dalam riwayat
     History.save(history_p.duplikasi, { set: true, target });
-    // ... mendapatkan path absolut dari target directory
+    // Mendapatkan path absolut dari direktori target
     const repo = cwd(target);
-    // ... membaca struktur direktori target dan menyimpannya sebagai markdown
+    // Membaca struktur direktori target dan mengubahnya menjadi format markdown
     const markdown = directory(repo);
-    // ... memeriksa apakah prompt.txt valid untuk digunakan
+    // Memeriksa dan memproses konfirmasi berkas prompt.txt
     const p = promptConfirm();
     let prompt = p.text;
-    // ... jika prompt.txt tidak valid atau tidak digunakan, minta input prompt secara langsung
+    // Jika prompt.txt tidak aktif, minta deskripsi modifikasi secara manual
     if (!p.cek) {
       prompt = Masukan.wajib("apa yang ingin dimodifikasi pada project?> ");
     }
-    // ... memanggil API Gemini untuk duplikasi dan modifikasi project
-    const { project, delets } = await mesinCall(
-      "konteksnya duplikat serta modifikasi tugasmu: " + prompt + markdown,
-    );
-    // ... meminta nama direktori output untuk project baru
+    prompt =
+      "konteksnya duplikat tugasmu: '" +
+      prompt.trim() +
+      "'\nberikut project yang diduplikasinya silahkan:\n" +
+      markdown;
+    // Memanggil LLM untuk menduplikasi serta memodifikasi proyek
+    const { project, delets } = await mesinCall(prompt);
+    // Meminta nama direktori keluaran untuk proyek hasil duplikasi
     const dir_out = Masukan.wajib("masukan nama project baru?> ");
-    // ... menampilkan pesan bahwa project sedang diduplikasi
+    // Menampilkan status progres duplikasi proyek
     Print.clear("sedang menduplikasi project...");
-    // ... mengulang untuk setiap item dalam respons 'project' dari AI
+    // Iterasi untuk membuat struktur proyek baru di direktori output
     for (const eee of project) {
       const lokasi = path.join("output", dir_out, eee.lokasi);
-      // ... menentukan jenis entitas (folder, config, file, dok) dan membuat/menulisnya
+      // Memproses pembuatan entitas folder, config, file, atau dokumen
       switch (eee.jenis) {
         case "folder":
           Dir.buat(lokasi);
@@ -67,10 +70,10 @@ async function duplikasi_project() {
           break;
       }
     }
-    // ... menampilkan pesan bahwa duplikasi project telah berhasil
+    // Menampilkan pesan sukses setelah proses duplikasi selesai
     Print.log("duplikasi project success...");
   } catch (err) {
-    // ... menangkap dan melempar kembali error jika terjadi masalah
+    // Menangkap dan melempar kembali error jika terjadi masalah
     throw new Error(err.message);
   }
 }

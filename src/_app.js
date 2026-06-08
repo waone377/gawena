@@ -6,7 +6,7 @@ import history_clear from "./control/history_clear.js";
 import Print from "./util/console.js";
 import Masukan from "./util/masukan.js";
 
-// ... menampilkan menu pilihan service
+// Menampilkan menu pilihan layanan kepada pengguna
 Print.clear("pilih service:");
 Print.log("1. buatkan project");
 Print.log("2. perbaiki project");
@@ -14,10 +14,10 @@ Print.log("3. duplikasi project");
 Print.log("4. undo project");
 Print.log("5. clear history");
 
-// ... meminta input opsi dari pengguna
+// Meminta input opsi layanan yang dipilih oleh pengguna
 const opsi = Masukan.pilih("service?", ["1", "2", "3", "4", "5"]);
 
-// ... menjalankan fungsi berdasarkan opsi yang dipilih
+// Menjalankan modul control sesuai opsi yang dipilih
 switch (opsi) {
   case "1":
     buatkan_project();

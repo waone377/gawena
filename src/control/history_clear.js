@@ -4,25 +4,25 @@ import History from "../service/history.js";
 
 import history_p from "../util/lokasi.js";
 function history_clear() {
-  // ... memulai blok try-catch untuk penanganan error
+  // Membungkus proses pembersihan riwayat dengan penanganan error
   try {
-    // ... mendapatkan data history
+    // Mengambil data riwayat percakapan model
     const h = History.get(history_p.historyModel, "[]");
-    // ... jika ada history, tampilkan jumlahnya dan minta konfirmasi penghapusan
+    // Jika riwayat tidak kosong, tampilkan jumlahnya dan minta konfirmasi
     if (h.length !== 0) {
       Print.clear("total history: ", h.length / 2);
       const confirm = Masukan.pilih("hapus data history?> ", ["y", "n"]);
-      // ... jika konfirmasi 'y', hapus history
+      // Menghapus data riwayat jika pengguna mengonfirmasi ya
       if (confirm === "y") {
         History.save(history_p.historyModel, []);
         Print.clear("history success terhapus...");
       }
     } else {
-      // ... jika tidak ada history, tampilkan pesan
+      // Menampilkan pesan jika tidak ada riwayat yang tersimpan
       Print.clear("tidak ada history!!!");
     }
   } catch (err) {
-    // ... menangkap dan melempar kembali error jika terjadi masalah
+    // Melempar error jika terjadi kegagalan pembersihan riwayat
     throw new Error(`history_clear: ${err.message}`);
   }
 }

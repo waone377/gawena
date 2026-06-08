@@ -9,37 +9,41 @@ import History from "../service/history.js";
 import targeter from "../service/target.js";
 import history_p from "../util/lokasi.js";
 async function perbaiki_project() {
-  // ... memulai blok try-catch untuk penanganan error
+  // Membungkus proses perbaikan proyek dengan penanganan error
   try {
-    // ... mendapatkan riwayat operasi perbaikan sebelumnya
+    // Mengambil riwayat target direktori perbaikan sebelumnya
     const h = History.get(history_p.perbaiki, { set: false, target: "" });
     let target = h.target;
-    // ... jika tidak ada riwayat yang valid, minta target directory dari pengguna
+    // Minta direktori target dari pengguna jika belum ditentukan di riwayat
     if (!h.set) {
       target = targeter();
     }
-    // ... menyimpan target directory yang digunakan untuk riwayat
+    // Menyimpan direktori target terpilih ke file riwayat
     History.save(history_p.perbaiki, { set: true, target });
-    // ... mendapatkan path absolut dari target directory
+    // Mendapatkan path absolut dari direktori target
     const repo = cwd(target);
-    // ... membaca struktur direktori target dan menyimpannya sebagai markdown
+    // Membaca struktur direktori target dan mengubahnya menjadi format markdown
     const markdown = directory(repo);
-    // ... memeriksa apakah prompt.txt valid untuk digunakan
+    // Memproses konfirmasi penggunaan file prompt.txt
     const p = promptConfirm();
     let prompt = p.text;
-    // ... jika prompt.txt tidak valid atau tidak digunakan, minta input prompt secara langsung
+    // Minta input instruksi perbaikan manual jika prompt.txt tidak digunakan
     if (!p.cek) {
       prompt = Masukan.wajib("apa yang ingin diperbaiki pada project?> ");
     }
-    // ... memanggil API Gemini untuk memperbaiki project
-    const { project, delets } = await mesinCall(
-      "konteksnya perbaiki tugasmu: " + prompt + markdown,
-    );
-    // ... menampilkan pesan bahwa project sedang diperbaiki
+    // menulis prompt ke riwayat
+    prompt =
+      "konteksnya perbaiki tugasmu: '" +
+      prompt.trim() +
+      "'\nberikut project yang diperbaikinya silahkan:\n" +
+      markdown;
+    // Memanggil API Gemini untuk melakukan perbaikan proyek
+    const { project, delets } = await mesinCall(promptprompt);
+    // Menampilkan status progres perbaikan proyek
     Print.clear("sedang memperbaiki project...");
-    // ... jika ada item yang dihapus dalam respons AI
+    // Memeriksa dan memproses penghapusan berkas jika diminta oleh AI
     if (delets.length !== 0) {
-      // ... mengulang untuk menghapus file/folder yang ditandai untuk dihapus
+      // Menghapus file atau folder yang ditandai untuk dihapus
       for (const eee of delets) {
         const lokasi = absolute(target, eee.lokasi);
         switch (eee.jenis) {
@@ -58,7 +62,7 @@ async function perbaiki_project() {
       }
       Print.log("penghapusan selesai...");
     }
-    // ... mengulang untuk membuat/memodifikasi file/folder
+    // Menulis atau memperbarui setiap file/folder hasil perbaikan dari AI
     for (const eee of project) {
       const lokasi = absolute(target, eee.lokasi);
       switch (eee.jenis) {
@@ -83,10 +87,10 @@ async function perbaiki_project() {
           break;
       }
     }
-    // ... menampilkan pesan bahwa perbaikan project telah berhasil
+    // Menampilkan laporan sukses perbaikan proyek
     Print.log("perbaikan project success...");
   } catch (err) {
-    // ... menangkap dan melempar kembali error jika terjadi masalah
+    // Menangkap dan melempar kembali error
     throw new Error(err.message);
   }
 }

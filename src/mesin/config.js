@@ -6,15 +6,15 @@ import "dotenv/config";
 let instruction_p = "src/mesin/instruction.md";
 let apiKey = process.env.API_KEY_GEMINI;
 
-// ... inisialisasi dan konfigurasi model Gemini AI
+// Menginisialisasi dan mengonfigurasi sesi chat dengan Google Gemini API
 function LLM() {
-  // ... memulai blok try-catch untuk penanganan error
+  // Membungkus konfigurasi model dengan penanganan error
   try {
-    // ... membaca instruksi sistem dari file
+    // Membaca instruksi sistem dari file eksternal
     const instruction = Fs.baca(instruction_p, "");
-    // ... membuat instance GoogleGenAI dengan API key
+    // Membuat instance GoogleGenAI dengan API Key
     const AI = new GoogleGenAI({ apiKey });
-    // ... membuat chat session dengan model yang dikonfigurasi
+    // Membuat sesi chat model Gemini dengan parameter dan skema respons JSON
     const model = AI.chats.create({
       model: process.env.MODEL,
       config: {
@@ -36,10 +36,10 @@ function LLM() {
       },
       history: [],
     });
-    // ... mengembalikan objek model dan AI
+    // Mengembalikan objek model dan AI yang siap digunakan
     return { model, AI };
   } catch (err) {
-    // ... menangkap dan melempar kembali error jika terjadi masalah
+    // Melempar error inisialisasi model
     throw new Error(`LLM: ${err.message}`);
   }
 }

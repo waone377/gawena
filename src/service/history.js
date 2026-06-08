@@ -4,44 +4,44 @@ import fs from "fs";
 import path from "path";
 
 class History {
-  // ... metode untuk menyimpan data ke file history
+  // Menyimpan data objek ke dalam berkas riwayat berformat JSON
   static save(p, value) {
     try {
       const dir_p = path.dirname(p);
-      // ... membuat direktori jika belum ada
+      // Memastikan direktori folder induk file riwayat sudah dibuat
       fs.mkdirSync(dir_p, { recursive: true });
-      // ... menulis data JSON ke file
+      // Menulis data JSON ke dalam file dengan format berindentasi
       fs.writeFileSync(p, JSON.stringify(value, null, 4));
     } catch (err) {
       throw new Error(`save history gagal: ${err.message}`);
     }
   }
 
-  // ... metode untuk membaca data dari file history
+  // Membaca data dari file riwayat JSON atau menginisialisasinya dengan nilai default
   static get(p, value) {
     try {
       try {
-        // ... memeriksa apakah file ada
+        // Memeriksa keberadaan file riwayat target
         fs.accessSync(p);
       } catch {
-        // ... jika file tidak ada, buat direktori dan tulis file default
+        // Membuat file default jika file riwayat belum tersedia
         const dir_p = path.dirname(p);
         fs.mkdirSync(dir_p, { recursive: true });
         fs.writeFileSync(p, JSON.stringify(value, null, 4));
       }
-      // ... membaca isi file
+      // Membaca isi berkas riwayat secara sinkron
       const isi = fs.readFileSync(p, "utf-8");
       const parse = JSON?.parse(isi) || null;
       let back = parse;
-      // ... jika data yang dibaca memiliki properti 'set', tanyakan pengguna apakah ingin menggunakannya
+      // Menawarkan penggunaan riwayat lama jika flag 'set' bernilai true
       if (parse.set) {
         Print.clear("ada riwayat:");
         console.dir(parse);
         const confirm = Masukan.pilih("gunakan itu?", ["y", "n"]);
         if (confirm === "y") {
-          back = parse; // ... gunakan riwayat jika dikonfirmasi
+          back = parse;
         } else {
-          parse.set = false; // ... jika tidak, tandai sebagai tidak digunakan
+          parse.set = false;
           back = parse;
         }
       }

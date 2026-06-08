@@ -6,27 +6,27 @@ import History from "../service/history.js";
 
 import history_p from "../util/lokasi.js";
 async function undo_project() {
-  // ... memulai blok try-catch untuk penanganan error
+  // Membungkus proses pemulihan (undo) proyek dengan penanganan error
   try {
-    // ... mendapatkan data riwayat pemulihan project
+    // Mengambil cadangan struktur proyek terakhir dari riwayat JSON
     const { dir, project } = History.get(history_p.projectJson, {
       dir: "",
       project: [],
       delets: [],
       laporan: "",
     });
-    // ... jika tidak ada project dalam history, tampilkan pesan error dan keluar
+    // Menghentikan program jika tidak ada data proyek yang dapat dipulihkan
     if (project.length === 0) {
       Print.clear("file", history_p.projectJson, "kosong!!!");
       process.exit(1);
     }
-    // ... meminta konfirmasi untuk melanjutkan pemulihan
+    // Menampilkan lokasi proyek dan meminta konfirmasi pemulihan
     Print.clear("project lokasi:\n", dir);
     const next = Masukan.pilih("lanjut pulihkan?", ["y", "n"]);
     if (next === "n") process.exit(1);
-    // ... menampilkan pesan bahwa pemulihan sedang berlangsung
+    // Menampilkan pesan indikator pemulihan proyek
     Print.clear("sedang memulihkan project...");
-    // ... mengulang untuk memulihkan setiap item project dari history
+    // Memulihkan setiap berkas dan direktori ke kondisi cadangan
     for (const eee of project) {
       const lokasi = path.join(dir, eee.lokasi);
       switch (eee.jenis) {
@@ -51,10 +51,10 @@ async function undo_project() {
           break;
       }
     }
-    // ... menampilkan pesan bahwa pemulihan project telah berhasil
+    // Menampilkan pesan sukses pemulihan proyek
     Print.log("pemulihan project success...");
   } catch (err) {
-    // ... menangkap dan melempar kembali error jika terjadi masalah
+    // Melempar error jika proses pemulihan gagal
     throw new Error(err.message);
   }
 }

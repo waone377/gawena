@@ -1,25 +1,25 @@
 class Console {
-  // ... metode untuk membersihkan layar konsol dan menampilkan pesan
+  // Membersihkan layar konsol dan menampilkan pesan baru
   static clear(...message) {
-    console.clear(); // ... membersihkan layar
+    console.clear();
     let msg;
     if (message.length > 0) {
-      msg = message.join(" "); // ... menggabungkan pesan jika ada lebih dari satu argumen
+      msg = message.join(" ");
     } else {
       msg = message[0];
     }
-    console.log(msg); // ... menampilkan pesan
+    console.log(msg);
   }
 
-  // ... metode untuk menampilkan pesan di konsol tanpa membersihkan layar
+  // Menampilkan pesan di konsol tanpa membersihkan layar sebelumnya
   static log(...message) {
     let msg;
     if (message.length > 0) {
-      msg = message.join(""); // ... menggabungkan pesan tanpa spasi jika tidak ada spasi di argumen
+      msg = message.join("");
     } else {
       msg = message[0];
     }
-    console.log(msg); // ... menampilkan pesan
+    console.log(msg, "\n");
   }
 }
 export default Console;

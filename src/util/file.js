@@ -2,46 +2,46 @@ import fs from "fs";
 import path from "path";
 
 class Fs {
-  // ... metode untuk menulis konten ke sebuah file
+  // Menulis konten teks ke sebuah berkas secara sinkron
   static tulis(p, value) {
     try {
       const p_dir = path.dirname(p);
-      // ... membuat direktori induk jika belum ada
+      // Membuat folder induk secara rekursif jika belum ada
       fs.mkdirSync(p_dir, { recursive: true });
-      // ... menulis konten ke file
+      // Menulis data teks ke path target
       fs.writeFileSync(p, value);
     } catch (err) {
       throw new Error(`tulis file gagal: ${err.message}`);
     }
   }
 
-  // ... metode untuk membaca konten dari sebuah file
+  // Membaca isi berkas teks dan mengembalikannya secara sinkron
   static baca(p, value) {
     try {
       try {
-        // ... memeriksa apakah file ada
+        // Memeriksa aksesibilitas berkas target
         fs.accessSync(p);
       } catch {
-        // ... jika file tidak ada, buat direktori dan tulis file dengan nilai default
+        // Membuat direktori baru jika berkas tidak ditemukan saat dibaca
         try {
           const p_dir = path.dirname(p);
           fs.mkdirSync(p_dir);
           fs.writeFileSync(p, value);
         } catch {
-          fs.writeFileSync(p, value); // ... jika pembuatan direktori gagal, coba tulis langsung
+          fs.writeFileSync(p, value);
         }
       }
-      // ... membaca dan mengembalikan isi file
+      // Mengembalikan konten string dari berkas
       return fs.readFileSync(p, "utf-8");
     } catch (err) {
       throw new Error(`baca file gagal: ${err.message}`);
     }
   }
 
-  // ... metode untuk menghapus sebuah file
+  // Menghapus berkas secara sinkron
   static hapus(p) {
     try {
-      // ... memeriksa apakah file ada sebelum menghapus
+      // Memastikan berkas ada sebelum dihapus
       fs.accessSync(p);
       fs.unlinkSync(p);
     } catch (err) {
@@ -50,24 +50,24 @@ class Fs {
   }
 }
 
-// ... bagian class folder untuk operasi direktori
+// Kelas utilitas untuk manipulasi operasi direktori
 class Dir {
-  // ... metode untuk membuat sebuah direktori
+  // Membuat direktori folder secara rekursif
   static buat(p) {
     try {
-      // ... membuat direktori secara rekursif
+      // Menjalankan perintah pembuatan folder sistem
       fs.mkdirSync(p, { recursive: true });
     } catch (err) {
       throw new Error(`buat folder gagal: ${err.message}`);
     }
   }
 
-  // ... metode untuk menghapus sebuah direktori (termasuk isinya)
+  // Menghapus direktori beserta seluruh isinya
   static hapus(p) {
     try {
-      // ... memeriksa apakah direktori ada sebelum menghapus
+      // Memastikan folder ada sebelum melakukan penghapusan
       fs.accessSync(p);
-      fs.rmSync(p, { recursive: true, force: true }); // ... force: true untuk menghapus tanpa prompt
+      fs.rmSync(p, { recursive: true, force: true });
     } catch (err) {
       throw new Error(`hapus folder gagal: ${err.message}`);
     }

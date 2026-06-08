@@ -2,64 +2,64 @@ import promptSync from "prompt-sync";
 const prompt = promptSync();
 
 class Masukan {
-  // ... metode untuk meminta input wajib dari pengguna
+  // Meminta input wajib dari pengguna di konsol (tidak boleh kosong)
   static wajib(message) {
     let value;
     while (true) {
       const v = prompt(message);
       const t = v.toLowerCase().trim();
-      // ... memeriksa apakah input kosong
+      // Validasi agar pengguna tidak mengirimkan input kosong
       if (!t) {
         console.log("silakan masukkan terlebih dahulu!");
         continue;
       } else if (t === "exit") {
-        // ... menangani input 'exit'
+        // Menangani perintah keluar dari program jika mengetik 'exit'
         console.clear();
         console.log("program berhenti...");
         process.exit(1);
       } else {
-        value = t; // ... menyimpan input yang valid
+        value = t;
         break;
       }
     }
-    console.clear(); // ... membersihkan layar setelah input
+    console.clear();
     return value;
   }
 
-  // ... metode untuk meminta pengguna memilih dari daftar opsi
+  // Meminta pengguna memilih opsi dari daftar pilihan yang diberikan
   static pilih(message, opsi) {
     let value;
     while (true) {
       const v = prompt(message + "\nsilahkan " + "(" + opsi.join("/") + ")?: ");
       const t = v.toLowerCase().trim();
-      // ... memeriksa apakah input ada dalam daftar opsi
+      // Memastikan input pengguna sesuai dengan opsi yang tersedia
       if (t && opsi.includes(t)) {
-        value = t; // ... menyimpan pilihan yang valid
+        value = t;
         break;
       } else if (t === "exit") {
-        // ... menangani input 'exit'
+        // Menangani penutupan paksa jika pengguna memilih exit
         console.clear();
         console.log("program berhenti...");
         process.exit(1);
       } else {
-        console.log(`Pilih antara ${opsi.join("/")} silahkan!`); // ... menampilkan pesan error jika pilihan tidak valid
+        console.log(`Pilih antara ${opsi.join("/")} silahkan!`);
       }
     }
-    console.clear(); // ... membersihkan layar setelah input
+    console.clear();
     return value;
   }
 
-  // ... metode untuk mendapatkan input biasa dari pengguna (tidak wajib, tidak ada validasi khusus)
+  // Meminta masukan opsional dari pengguna tanpa validasi ketat
   static biasa(message) {
     const v = prompt(message);
     const t = v.toLowerCase().trim();
     if (t === "exit") {
-      // ... menangani input 'exit'
+      // Keluar dari program secara aman jika pengguna menginput exit
       console.clear();
       console.log("program berhenti...");
       process.exit(1);
     }
-    console.clear(); // ... membersihkan layar setelah input
+    console.clear();
     return t;
   }
 }
