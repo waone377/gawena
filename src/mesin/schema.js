@@ -1,6 +1,5 @@
 import { Type } from "@google/genai";
 
-// Mendefinisikan skema validasi objek file/folder hasil generate AI
 const projectSchema = {
   type: Type.OBJECT,
   properties: {
@@ -14,7 +13,7 @@ const projectSchema = {
       type: Type.STRING,
       description:
         "Path relatif dari root proyek (tanpa menyertakan nama repository). Gunakan '/' sebagai pemisah direktori. Contoh yang benar: 'src/components/Button.jsx'. Jangan gunakan path absolut.",
-      pattern: "^[a-zA-Z0-9._\-/]+$",
+      pattern: "^[a-zA-Z0-9._\\-/]+$",
     },
     konten: {
       type: Type.STRING,
@@ -25,7 +24,6 @@ const projectSchema = {
   required: ["jenis", "lokasi", "konten"],
 };
 
-// Mendefinisikan skema validasi objek penghapusan file/folder
 const deleteSchema = {
   type: Type.OBJECT,
   properties: {
@@ -33,19 +31,18 @@ const deleteSchema = {
       type: Type.STRING,
       enum: ["file", "folder"],
       description:
-        "Jenis entitas yang akan dihapus dari proyek. Gunakan 'file' untuk berkas dan 'folder' untuk direktori.",
+        "Jenis entitas yang akan dihapus dari proyek. Gunakan 'file' untuk berkas and 'folder' untuk direktori.",
     },
     lokasi: {
       type: Type.STRING,
       description:
         "Path relatif dari root proyek untuk file atau folder yang dihapus. Tidak boleh menyertakan nama repository dan harus sesuai struktur proyek.",
-      pattern: "^[a-zA-Z0-9._\-/]+$",
+      pattern: "^[a-zA-Z0-9._\\-/]+$",
     },
   },
   required: ["jenis", "lokasi"],
 };
 
-// Mendefinisikan skema utama respons JSON dari model Gemini
 const customSchema = {
   type: Type.OBJECT,
   properties: {

@@ -6,7 +6,7 @@ import { cwd, potong } from "../service/lokasi.js";
 import History from "../service/history.js";
 import history_p from "../util/lokasi.js";
 
-// Memindai berkas di dalam direktori target dengan mengabaikan berkas yang dikecualikan
+/* Fungsi internal untuk memindai berkas-berkas proyek serta mengonfigurasi filter abaikan */
 function getPath(target) {
   try {
     Print.clear("masukan berkas yang ingin dikecualikan:");
@@ -16,14 +16,17 @@ function getPath(target) {
     Print.log("pisahkan dengan koma(,)");
     Print.log("contoh: node_modules/**, **/compres.zip, **/*.mp3");
     Print.log("kosongkan jika tidak ada");
+    /* Mengambil daftar berkas/folder pengecualian dari input pengguna */
     const berkasUsr = Masukan.biasa("silakan?> ");
     let ignore = ["**/*.mp3", "node_modules/**", ".git/**", "dist/**"];
     if (berkasUsr) {
-      const berkasArray = berkasUsr.split(",");
-      const berkasClear = berkasArray.map((e) => e.trim());
-      ignore = [...ignore, ...berkasClear];
+      const berkasArray = berkasUsr
+        .split(",")
+        .map((e) => e.trim())
+        .filter(Boolean);
+      ignore = [...ignore, ...berkasArray];
     }
-    // Menggunakan fast-glob untuk mendapatkan path file secara rekursif
+    /* Melakukan pencarian berkas menggunakan pustaka fast-glob */
     const paths = fg.sync("**/*", {
       cwd: target.replace("/music", "/Music"),
       ignore: ignore,
@@ -32,55 +35,60 @@ function getPath(target) {
     });
     return paths;
   } catch (err) {
+    /* Menangani kesalahan pemindaian path direktori */
     throw new Error(`getPath: ${err.message}`);
   }
 }
-// Membuat dan menyimpan representasi JSON terstruktur dari seluruh isi direktori target
+
+/* Fungsi internal untuk menyimpan berkas-berkas proyek asli ke cadangan JSON */
 function repositoryJson(paths, target) {
+  /* Memetakan setiap jalur berkas menjadi objek representasi file proyek */
   const code = paths.map((e) => {
     const lokasi = potong(target, e);
     const value = Fs.baca(e, "");
     return { jenis: "file", lokasi: lokasi, konten: value };
   });
-  // Menyusun objek data proyek untuk riwayat pemulihan
   const project = {
     dir: target,
     project: code,
     delets: [],
     laporan: "",
   };
-  // Menyimpan data proyek ke file history JSON
+  /* Menyimpan struktur objek proyek ke dalam database riwayat JSON */
   History.save(history_p.projectJson, project);
 }
-// Membuat representasi file markdown yang berisi seluruh kode sumber proyek
 
+/* Fungsi internal untuk menyatukan daftar isi berkas menjadi teks markdown tunggal */
 function repositoryMD(target, source) {
   const head = `\project lokasi: ${target}\n### source code:\n`;
   const md_array = [head, ...source];
   const markdown = md_array.join("-----\n");
-  // Menulis konten markdown ke berkas cadangan
+  /* Menulis dokumen markdown gabungan kode sumber */
   Fs.tulis(history_p.projectMarkdown, markdown.trim());
   return markdown.trim();
 }
 
-// Membaca struktur direktori secara utuh dan mengembalikannya dalam format markdown
+/* Fungsi utama untuk membaca seluruh berkas dari direktori proyek target */
 function directory(target) {
   try {
+    /* Mendapatkan seluruh daftar berkas yang disaring */
     const paths = getPath(target);
     Print.clear("sedang membaca directory...");
-    // Memetakan isi setiap berkas menjadi blok teks berformat markdown
+    /* Membaca konten teks dari masing-masing berkas */
     const source = paths.map((e) => {
       const lokasi = potong(target, e);
       Print.log("membaca ", lokasi);
+      const extensi = lokasi.split(".")[1];
       const value = Fs.baca(e, "");
-      return `lokasi:\n${lokasi}\n\`\`\`\n${value}\`\`\` `;
+      return `lokasi:\n${lokasi}\n\`\`\`${extensi}\n${value}\`\`\` `;
     });
-    // Menyimpan berkas proyek dalam format JSON untuk fitur undo
+    /* Menyimpan file cadangan JSON proyek */
     repositoryJson(paths, target);
-    // Menghasilkan file dokumentasi markdown proyek
+    /* Membuat serta mengembalikan representasi kode sumber dalam markdown */
     const markdown = repositoryMD(target, source);
     return markdown;
   } catch (err) {
+    /* Menangani error saat proses pemindaian direktori */
     throw new Error(`directory: ${err.message}`);
   }
 }

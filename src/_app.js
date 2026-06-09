@@ -1,3 +1,4 @@
+/* Mengimpor modul kontrol untuk berbagai layanan utama aplikasi */
 import buatkan_project from "./control/buatkan_project.js";
 import perbaiki_project from "./control/perbaiki_project.js";
 import duplikasi_project from "./control/duplikasi_project.js";
@@ -6,7 +7,7 @@ import history_clear from "./control/history_clear.js";
 import Print from "./util/console.js";
 import Masukan from "./util/masukan.js";
 
-// Menampilkan menu pilihan layanan kepada pengguna
+/* Menampilkan menu utama layanan kepada pengguna */
 Print.clear("pilih service:");
 Print.log("1. buatkan project");
 Print.log("2. perbaiki project");
@@ -14,10 +15,10 @@ Print.log("3. duplikasi project");
 Print.log("4. undo project");
 Print.log("5. clear history");
 
-// Meminta input opsi layanan yang dipilih oleh pengguna
+/* Meminta masukan dari pengguna untuk memilih opsi layanan */
 const opsi = Masukan.pilih("service?", ["1", "2", "3", "4", "5"]);
 
-// Menjalankan modul control sesuai opsi yang dipilih
+/* Mengeksekusi modul kontrol yang sesuai berdasarkan opsi yang dipilih */
 switch (opsi) {
   case "1":
     buatkan_project();

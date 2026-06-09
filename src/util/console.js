@@ -1,5 +1,6 @@
+/* Kelas utilitas bantu pembantu untuk pencetakan teks pada konsol/terminal */
 class Console {
-  // Membersihkan layar konsol dan menampilkan pesan baru
+  /* Membersihkan tampilan layar terminal lalu mencetak pesan barunya */
   static clear(...message) {
     console.clear();
     let msg;
@@ -11,7 +12,7 @@ class Console {
     console.log(msg);
   }
 
-  // Menampilkan pesan di konsol tanpa membersihkan layar sebelumnya
+  /* Mencetak pesan log biasa ke terminal diikuti dengan baris baru */
   static log(...message) {
     let msg;
     if (message.length > 0) {

@@ -8,42 +8,41 @@ import { absolute, cwd } from "../service/lokasi.js";
 import History from "../service/history.js";
 import targeter from "../service/target.js";
 import history_p from "../util/lokasi.js";
+
+/* Fungsi utama untuk memperbaiki bug atau memodifikasi kode pada proyek yang ada */
 async function perbaiki_project() {
-  // Membungkus proses perbaikan proyek dengan penanganan error
   try {
-    // Mengambil riwayat target direktori perbaikan sebelumnya
+    /* Memeriksa riwayat target proyek yang pernah diperbaiki sebelumnya */
     const h = History.get(history_p.perbaiki, { set: false, target: "" });
     let target = h.target;
-    // Minta direktori target dari pengguna jika belum ditentukan di riwayat
+    /* Jika belum diset, meminta direktori target baru dari pengguna */
     if (!h.set) {
       target = targeter();
     }
-    // Menyimpan direktori target terpilih ke file riwayat
+    /* Menyimpan status target proyek ke riwayat */
     History.save(history_p.perbaiki, { set: true, target });
-    // Mendapatkan path absolut dari direktori target
+    /* Mendapatkan path absolut dari proyek target */
     const repo = cwd(target);
-    // Membaca struktur direktori target dan mengubahnya menjadi format markdown
+    /* Membaca direktori target ke format teks markdown */
     const markdown = directory(repo);
-    // Memproses konfirmasi penggunaan file prompt.txt
+    /* Membaca konfirmasi prompt dari berkas eksternal */
     const p = promptConfirm();
     let prompt = p.text;
-    // Minta input instruksi perbaikan manual jika prompt.txt tidak digunakan
+    /* Meminta input manual jika tidak menggunakan berkas prompt */
     if (!p.cek) {
       prompt = Masukan.wajib("apa yang ingin diperbaiki pada project?> ");
     }
-    // menulis prompt ke riwayat
+    /* Memformat instruksi perbaikan untuk mesin AI */
     prompt =
-      "konteksnya perbaiki tugasmu: '" +
+      "konteksnya memperbaiki tugasmu: '" +
       prompt.trim() +
       "'\nberikut project yang diperbaikinya silahkan:\n" +
       markdown;
-    // Memanggil API Gemini untuk melakukan perbaikan proyek
-    const { project, delets } = await mesinCall(promptprompt);
-    // Menampilkan status progres perbaikan proyek
+    /* Menjalankan pemanggilan AI untuk mendapatkan file yang diubah/dihapus */
+    const { project, delets } = await mesinCall(prompt);
     Print.clear("sedang memperbaiki project...");
-    // Memeriksa dan memproses penghapusan berkas jika diminta oleh AI
+    /* Menghapus file atau folder yang terdaftar di dalam array delets */
     if (delets.length !== 0) {
-      // Menghapus file atau folder yang ditandai untuk dihapus
       for (const eee of delets) {
         const lokasi = absolute(target, eee.lokasi);
         switch (eee.jenis) {
@@ -62,7 +61,7 @@ async function perbaiki_project() {
       }
       Print.log("penghapusan selesai...");
     }
-    // Menulis atau memperbarui setiap file/folder hasil perbaikan dari AI
+    /* Memperbarui atau menulis ulang berkas-berkas proyek baru */
     for (const eee of project) {
       const lokasi = absolute(target, eee.lokasi);
       switch (eee.jenis) {
@@ -87,10 +86,9 @@ async function perbaiki_project() {
           break;
       }
     }
-    // Menampilkan laporan sukses perbaikan proyek
     Print.log("perbaikan project success...");
   } catch (err) {
-    // Menangkap dan melempar kembali error
+    /* Menangani kegagalan proses perbaikan proyek */
     throw new Error(err.message);
   }
 }

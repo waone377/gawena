@@ -1,19 +1,19 @@
 import promptSync from "prompt-sync";
+/* Menginisialisasi modul input sinkronus untuk terminal */
 const prompt = promptSync();
 
+/* Kelas pembantu untuk menangani interaksi masukan pengguna melalui CLI */
 class Masukan {
-  // Meminta input wajib dari pengguna di konsol (tidak boleh kosong)
+  /* Meminta masukan teks wajib dari pengguna yang tidak boleh kosong */
   static wajib(message) {
     let value;
     while (true) {
       const v = prompt(message);
       const t = v.toLowerCase().trim();
-      // Validasi agar pengguna tidak mengirimkan input kosong
       if (!t) {
         console.log("silakan masukkan terlebih dahulu!");
         continue;
       } else if (t === "exit") {
-        // Menangani perintah keluar dari program jika mengetik 'exit'
         console.clear();
         console.log("program berhenti...");
         process.exit(1);
@@ -26,18 +26,16 @@ class Masukan {
     return value;
   }
 
-  // Meminta pengguna memilih opsi dari daftar pilihan yang diberikan
+  /* Meminta masukan pilihan dari daftar opsi yang telah ditentukan sebelumnya */
   static pilih(message, opsi) {
     let value;
     while (true) {
       const v = prompt(message + "\nsilahkan " + "(" + opsi.join("/") + ")?: ");
       const t = v.toLowerCase().trim();
-      // Memastikan input pengguna sesuai dengan opsi yang tersedia
       if (t && opsi.includes(t)) {
         value = t;
         break;
       } else if (t === "exit") {
-        // Menangani penutupan paksa jika pengguna memilih exit
         console.clear();
         console.log("program berhenti...");
         process.exit(1);
@@ -49,12 +47,11 @@ class Masukan {
     return value;
   }
 
-  // Meminta masukan opsional dari pengguna tanpa validasi ketat
+  /* Meminta masukan opsional dari pengguna secara bebas */
   static biasa(message) {
     const v = prompt(message);
     const t = v.toLowerCase().trim();
     if (t === "exit") {
-      // Keluar dari program secara aman jika pengguna menginput exit
       console.clear();
       console.log("program berhenti...");
       process.exit(1);

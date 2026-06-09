@@ -3,30 +3,29 @@ import Print from "../util/console.js";
 import Masukan from "../util/masukan.js";
 import path from "path";
 import History from "../service/history.js";
-
 import history_p from "../util/lokasi.js";
+
+/* Fungsi utama untuk memulihkan perubahan proyek ke kondisi cadangan sebelumnya */
 async function undo_project() {
-  // Membungkus proses pemulihan (undo) proyek dengan penanganan error
   try {
-    // Mengambil cadangan struktur proyek terakhir dari riwayat JSON
+    /* Mendapatkan data proyek cadangan terakhir dari riwayat */
     const { dir, project } = History.get(history_p.projectJson, {
       dir: "",
       project: [],
       delets: [],
       laporan: "",
     });
-    // Menghentikan program jika tidak ada data proyek yang dapat dipulihkan
+    /* Validasi jika tidak ada data proyek yang dapat dipulihkan */
     if (project.length === 0) {
       Print.clear("file", history_p.projectJson, "kosong!!!");
       process.exit(1);
     }
-    // Menampilkan lokasi proyek dan meminta konfirmasi pemulihan
     Print.clear("project lokasi:\n", dir);
+    /* Menanyakan konfirmasi pemulihan kepada pengguna */
     const next = Masukan.pilih("lanjut pulihkan?", ["y", "n"]);
     if (next === "n") process.exit(1);
-    // Menampilkan pesan indikator pemulihan proyek
     Print.clear("sedang memulihkan project...");
-    // Memulihkan setiap berkas dan direktori ke kondisi cadangan
+    /* Menulis kembali setiap folder dan file ke direktori asalnya */
     for (const eee of project) {
       const lokasi = path.join(dir, eee.lokasi);
       switch (eee.jenis) {
@@ -51,10 +50,9 @@ async function undo_project() {
           break;
       }
     }
-    // Menampilkan pesan sukses pemulihan proyek
     Print.log("pemulihan project success...");
   } catch (err) {
-    // Melempar error jika proses pemulihan gagal
+    /* Menangani error pada alur pemulihan proyek */
     throw new Error(err.message);
   }
 }

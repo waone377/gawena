@@ -1,28 +1,25 @@
 import fs from "fs";
 import path from "path";
 
+/* Kelas utilitas untuk manipulasi operasi berkas (I/O) */
 class Fs {
-  // Menulis konten teks ke sebuah berkas secara sinkron
+  /* Menulis string atau konten langsung ke berkas fisik dan membuat direktori secara rekursif jika belum ada */
   static tulis(p, value) {
     try {
       const p_dir = path.dirname(p);
-      // Membuat folder induk secara rekursif jika belum ada
       fs.mkdirSync(p_dir, { recursive: true });
-      // Menulis data teks ke path target
       fs.writeFileSync(p, value);
     } catch (err) {
       throw new Error(`tulis file gagal: ${err.message}`);
     }
   }
 
-  // Membaca isi berkas teks dan mengembalikannya secara sinkron
+  /* Membaca isi teks berkas fisik, jika berkas tidak ada maka akan otomatis dibuat baru terlebih dahulu */
   static baca(p, value) {
     try {
       try {
-        // Memeriksa aksesibilitas berkas target
         fs.accessSync(p);
       } catch {
-        // Membuat direktori baru jika berkas tidak ditemukan saat dibaca
         try {
           const p_dir = path.dirname(p);
           fs.mkdirSync(p_dir);
@@ -31,17 +28,15 @@ class Fs {
           fs.writeFileSync(p, value);
         }
       }
-      // Mengembalikan konten string dari berkas
       return fs.readFileSync(p, "utf-8");
     } catch (err) {
       throw new Error(`baca file gagal: ${err.message}`);
     }
   }
 
-  // Menghapus berkas secara sinkron
+  /* Menghapus berkas fisik yang ditentukan dari media penyimpanan */
   static hapus(p) {
     try {
-      // Memastikan berkas ada sebelum dihapus
       fs.accessSync(p);
       fs.unlinkSync(p);
     } catch (err) {
@@ -50,22 +45,20 @@ class Fs {
   }
 }
 
-// Kelas utilitas untuk manipulasi operasi direktori
+/* Kelas utilitas untuk manajemen struktur folder/direktori */
 class Dir {
-  // Membuat direktori folder secara rekursif
+  /* Membuat folder direktori baru beserta folder induknya secara rekursif */
   static buat(p) {
     try {
-      // Menjalankan perintah pembuatan folder sistem
       fs.mkdirSync(p, { recursive: true });
     } catch (err) {
       throw new Error(`buat folder gagal: ${err.message}`);
     }
   }
 
-  // Menghapus direktori beserta seluruh isinya
+  /* Menghapus folder beserta seluruh berkas dan sub-folder di dalamnya secara rekursif */
   static hapus(p) {
     try {
-      // Memastikan folder ada sebelum melakukan penghapusan
       fs.accessSync(p);
       fs.rmSync(p, { recursive: true, force: true });
     } catch (err) {

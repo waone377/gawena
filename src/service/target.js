@@ -3,19 +3,18 @@ import Masukan from "../util/masukan.js";
 import { cwd } from "../service/lokasi.js";
 import fs from "fs";
 
-// Meminta masukan lokasi direktori target yang valid dari pengguna
+/* Fungsi untuk mendapatkan serta melakukan validasi keberadaan direktori proyek target */
 function targeter() {
   try {
     let lokasi;
-    // Loop interaktif hingga pengguna memasukkan direktori yang valid
+    /* Melakukan looping hingga pengguna memasukkan path direktori yang benar-benar ada */
     while (true) {
       lokasi = Masukan.wajib("lokasi directory target dari?> home/");
-      // Memverifikasi keberadaan direktori target secara sinkron
       try {
+        /* Memeriksa akses direktori target fisik */
         fs.accessSync(cwd(lokasi).replace("/music", "/Music"));
         break;
       } catch {
-        // Menampilkan pesan kesalahan jika direktori tidak valid
         Print.clear(cwd(lokasi), " tidak ditemukan!!!");
         continue;
       }

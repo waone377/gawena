@@ -2,50 +2,49 @@ import LLM from "./config.js";
 import Print from "../util/console.js";
 import Masukan from "../util/masukan.js";
 import History from "../service/history.js";
-
 import history_p from "../util/lokasi.js";
+
+/* Fungsi utama untuk mengirim pesan ke API Gemini dan mengelola umpan balik */
 async function mesinCall(prompt) {
-  // Membungkus panggilan API Gemini dengan penanganan error
   try {
-    // Menginisialisasi model LLM
+    /* Melakukan inisialisasi model dan client AI */
     let { model, AI } = LLM();
-    let history = model.history;
     let message = prompt;
-    // Mengambil riwayat percakapan model sebelumnya
+    /* Mengambil riwayat percakapan sebelumnya dari berkas riwayat */
     const h = History.get(history_p.historyModel, "[]");
     if (h.length !== 0) {
       Print.clear("total history: ", h.length / 2);
-      // Meminta konfirmasi apakah pengguna ingin melanjutkan riwayat percakapan
+      /* Meminta konfirmasi apakah ingin menggunakan riwayat obrolan sebelumnya */
       const isHistory = Masukan.pilih("gunakan history?", ["y", "n"]);
       if (isHistory === "y") {
+        /* Mengambil 4 pesan terakhir dari riwayat obrolan */
         model.history = h.slice(-4);
       }
     }
-    // Loop interaktif untuk mengirim permintaan dan memproses revisi hasil
+    /* Loop interaktif untuk mengirimkan pesan dan menerima revisi hasil */
     while (true) {
       Print.clear("gawena sedang mengerjakan...");
-      // Mengirim pesan prompt ke model Gemini
+      /* Mengirimkan pesan prompt ke model Gemini */
       const response = await model.sendMessage({ message });
       const result = response.text;
-      // Mendekode respons JSON dari AI
+      /* Membaca hasil JSON terstruktur dari respons AI */
       const { project, delets, laporan } = JSON.parse(result);
       Print.clear("laporan tugas:n", laporan);
-      // Menyimpan riwayat percakapan terbaru
+      /* Menyimpan riwayat percakapan yang baru ke berkas riwayat */
       History.save(history_p.historyModel, model.history);
-      // Meminta masukan apakah pengguna ingin merevisi hasil pengerjaan
+      /* Menawarkan revisi hasil apabila output belum sesuai harapan */
       const next = Masukan.pilih("refisi kembali hasil?", ["y", "n"]);
-      // Memproses revisi dengan memperbarui pesan prompt berikutnya
       if (next === "y") {
         const refisi = Masukan.wajib("apa yang ingin direvisi?> ");
         message = `konteknya refisi tugasmu:  ${refisi}`;
         continue;
       }
-      // Menyimpan hasil akhir ke file output jika tidak ada revisi
+      /* Menyimpan cadangan output mentah terakhir */
       History.save(history_p.output, JSON.parse(result));
       return { project, delets };
     }
   } catch (err) {
-    // Melempar error jika terjadi kesalahan komunikasi API
+    /* Menangani error selama proses pemanggilan mesin AI */
     throw new Error(`mesinCall: ${err.message}`);
   }
 }

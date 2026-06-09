@@ -5,28 +5,27 @@ import Print from "../util/console.js";
 import Masukan from "../util/masukan.js";
 import path from "path";
 
+/* Fungsi utama untuk membuat proyek baru menggunakan kecerdasan buatan */
 async function buatkan_project() {
-  // Membungkus proses pembuatan proyek dengan try-catch untuk penanganan error
   try {
-    // Memeriksa dan mengonfirmasi penggunaan file prompt.txt
+    /* Mengonfirmasi penggunaan template prompt yang sudah ada */
     const p = promptConfirm();
     let prompt = p.text;
-    // Jika prompt.txt tidak digunakan, minta input manual dari pengguna
+    /* Jika tidak menggunakan prompt.txt, meminta input langsung dari pengguna */
     if (!p.cek) {
       prompt = Masukan.wajib("project seperti apa?> ");
     }
-    // Memanggil API Gemini untuk menghasilkan struktur proyek baru
+    /* Memanggil mesin kecerdasan buatan Gemini untuk memproses pembuatan proyek */
     const { project } = await mesinCall(
-      "konteksnya buat dari awal tugasmu: " + prompt,
+      "konteksnya membuat tugasmu: " + prompt,
     );
-    // Meminta input nama direktori hasil output proyek
+    /* Menentukan direktori keluaran proyek baru */
     const dir = Masukan.wajib("masukan nama project hasil?> output/");
-    // Menampilkan status progres pembuatan berkas
     Print.clear("sedang membuat project...");
-    // Iterasi untuk memproses setiap entitas proyek yang dikembalikan oleh AI
+    /* Melakukan iterasi untuk setiap item proyek yang dihasilkan */
     for (const eee of project) {
       const lokasi = path.join("output", dir, eee.lokasi);
-      // Membuat folder atau menulis file sesuai dengan jenis entitasnya
+      /* Memproses pembuatan berdasarkan jenis item (folder, file, config, dok) */
       switch (eee.jenis) {
         case "folder":
           Dir.buat(lokasi);
@@ -49,10 +48,9 @@ async function buatkan_project() {
           break;
       }
     }
-    // Menampilkan pesan sukses setelah seluruh berkas berhasil dibuat
     Print.log("pembuatan project success...");
   } catch (err) {
-    // Melempar error ke tingkat yang lebih tinggi jika terjadi kegagalan
+    /* Menangani error dan meneruskannya ke tingkat atas */
     throw new Error(err.message);
   }
 }

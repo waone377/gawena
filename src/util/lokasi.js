@@ -1,8 +1,10 @@
+/* Objek pemetaan jalur penyimpanan data riwayat dan cadangan konfigurasi sistem */
 const history_p = {
   projectJson: "history/project/project.json",
   projectMarkdown: "history/project/project.md",
   perbaiki: "history/target/perbaiki.json",
   duplikasi: "history/target/duplikasi.json",
+  ignore: "history/ignore.json",
   historyModel: "history/history.json",
   output: "history/output.json",
 };
