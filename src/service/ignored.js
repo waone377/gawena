@@ -12,8 +12,8 @@ function getIgnored(target) {
     let ignored = [];
     let confirm = "n";
     /* cek data apa ada */
-    if (data) {
-      Print.clear("ada riwayat config:\n", data.ignored);
+    if (data.ignored.length !== 0) {
+      Print.clear("ada riwayat config ignore:\n", data.ignored);
       /* menanyakan apa ingin gunakan riwayat*/
       confirm = Masukan.pilih("gunakan itu?", ["y", "n"]);
       ignored = data.ignored;
