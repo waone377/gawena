@@ -9,79 +9,99 @@ import History from "../service/history.js";
 import targeter from "../service/target.js";
 import history_p from "../util/lokasi.js";
 
-/* Fungsi utama untuk memperbaiki bug atau memodifikasi kode pada proyek yang ada */
 async function perbaiki_project() {
   try {
-    /* Memeriksa riwayat target proyek yang pernah diperbaiki sebelumnya */
+    /* Memanggil fungsi pembaca target proyek dari file service */
     const target = targeter();
-    /* Mendapatkan path absolut dari proyek target */
+    /* Memanggil fungsi konversi lokasi absolut dari file service */
     const repo = cwd(target);
-    /* Membaca direktori target ke format teks markdown */
+    /* Memanggil fungsi pembaca struktur direktori dari file service */
     const markdown = directory(repo);
-    /* Membaca konfirmasi prompt dari berkas eksternal */
+    /* Memanggil fungsi konfirmasi prompt dari file service */
     const p = promptConfirm();
     let prompt = p.text;
-    /* Meminta input manual jika tidak menggunakan berkas prompt */
+    /* Memeriksa kondisi jika berkas prompt tidak disetujui */
     if (!p.cek) {
+      /* Memanggil fungsi masukan wajib dari file utilitas */
       prompt = Masukan.wajib("apa yang ingin diperbaiki pada project?> ");
     }
-    /* Memformat instruksi perbaikan untuk mesin AI */
     prompt =
       "konteksnya memperbaiki tugasmu: '" +
       prompt.trim() +
       "'\nberikut project yang diperbaikinya silahkan:\n" +
       markdown;
-    /* Menjalankan pemanggilan AI untuk mendapatkan file yang diubah/dihapus */
+    /* Memanggil fungsi mesin AI dari file mesin untuk memproses perbaikan */
     const { project, delets } = await mesinCall(prompt);
+    /* Memanggil fungsi pembersihan layar dari file utilitas */
     Print.clear("sedang memperbaiki project...");
-    /* Menghapus file atau folder yang terdaftar di dalam array delets */
+    /* Memeriksa kondisi jika ada berkas yang perlu dihapus */
     if (delets.length !== 0) {
+      /* Melakukan perulangan untuk setiap berkas yang akan dihapus */
       for (const eee of delets) {
+        /* Memanggil fungsi penghasil lokasi absolut dari file service */
         const lokasi = absolute(target, eee.lokasi);
+        /* Memeriksa kondisi berdasarkan jenis entitas yang akan dihapus */
         switch (eee.jenis) {
           case "folder":
+            /* Memanggil fungsi penghapusan direktori (IO CRUD) dari file utilitas */
             Dir.hapus(lokasi);
+            /* Memanggil fungsi pencetakan log dari file utilitas */
             Print.log(eee.jenis, " ", lokasi, " success deleted");
             break;
           case "file":
+            /* Memanggil fungsi penghapusan berkas (IO CRUD) dari file utilitas */
             Fs.hapus(lokasi);
+            /* Memanggil fungsi pencetakan log dari file utilitas */
             Print.log(eee.jenis, " ", lokasi, " success deleted");
             break;
           default:
+            /* Memanggil fungsi pencetakan log dari file utilitas */
             Print.log(eee.jenis, " ", lokasi, " failed deleted");
             break;
         }
       }
+      /* Memanggil fungsi pencetakan log dari file utilitas */
       Print.log("penghapusan selesai...");
     }
-    /* Memperbarui atau menulis ulang berkas-berkas proyek baru */
+    /* Melakukan perulangan untuk memproses penulisan ulang setiap entitas proyek */
     for (const eee of project) {
+      /* Memanggil fungsi penghasil lokasi absolut dari file service */
       const lokasi = absolute(target, eee.lokasi);
+      /* Memeriksa kondisi berdasarkan jenis entitas proyek */
       switch (eee.jenis) {
         case "folder":
+          /* Memanggil fungsi pembuatan direktori (IO CRUD) dari file utilitas */
           Dir.buat(lokasi);
+          /* Memanggil fungsi pencetakan log dari file utilitas */
           Print.log(eee.jenis, " ", lokasi, " success updated");
           break;
         case "config":
+          /* Memanggil fungsi penulisan berkas (IO CRUD) dari file utilitas */
           Fs.tulis(lokasi, eee.konten);
+          /* Memanggil fungsi pencetakan log dari file utilitas */
           Print.log(eee.jenis, " ", lokasi, " success updated");
           break;
         case "file":
+          /* Memanggil fungsi penulisan berkas (IO CRUD) dari file utilitas */
           Fs.tulis(lokasi, eee.konten);
+          /* Memanggil fungsi pencetakan log dari file utilitas */
           Print.log(eee.jenis, " ", lokasi, " success updated");
           break;
         case "dok":
+          /* Memanggil fungsi penulisan berkas (IO CRUD) dari file utilitas */
           Fs.tulis(lokasi, eee.konten);
+          /* Memanggil fungsi pencetakan log dari file utilitas */
           Print.log(eee.jenis, " ", lokasi, " success updated");
           break;
         default:
+          /* Memanggil fungsi pencetakan log dari file utilitas */
           Print.log(eee.jenis, " ", lokasi, " failed updated!");
           break;
       }
     }
+    /* Memanggil fungsi pencetakan log dari file utilitas */
     Print.log("perbaikan project success...");
   } catch (err) {
-    /* Menangani kegagalan proses perbaikan proyek */
     throw new Error(err.message);
   }
 }

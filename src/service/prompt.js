@@ -2,24 +2,27 @@ import Print from "../util/console.js";
 import Masukan from "../util/masukan.js";
 import { Fs } from "../util/file.js";
 
-/* Menentukan path berkas prompt teks default */
 let prompt_p = "prompt.txt";
 
-/* Fungsi konfirmasi ketersediaan instruksi dari berkas prompt.txt */
 function promptConfirm() {
   try {
-    /* Membaca isi berkas prompt */
+    /* Memanggil fungsi pembaca berkas (IO CRUD) dari file utilitas */
     const text = Fs.baca(prompt_p, "");
+    /* Memanggil fungsi pemilihan opsi masukan dari file utilitas */
     const confirm = Masukan.pilih("gunakan prompt.txt?", ["y", "n"]);
+    /* Memeriksa kondisi jika pengguna setuju menggunakan berkas prompt */
     if (confirm === "y") {
-      /* Memeriksa jika isi berkas kosong */
+      /* Memeriksa kondisi jika berkas prompt kosong */
       if (!text) {
+        /* Memanggil fungsi pencetakan log dari file utilitas */
         Print.log("prompt.txt masih kosong!!!");
         return { cek: false, text };
       }
+      /* Memanggil fungsi pembersihan layar dari file utilitas */
       Print.clear("isi prompt:\n", text, "\n-------");
-      /* Menanyakan persetujuan eksekusi dengan isi prompt yang dibaca */
+      /* Memanggil fungsi pemilihan opsi masukan dari file utilitas */
       const next = Masukan.pilih("lanjut?", ["y", "n"]);
+      /* Memeriksa kondisi jika pengguna setuju melanjutkan */
       if (next === "y") {
         return { cek: true, text };
       } else {

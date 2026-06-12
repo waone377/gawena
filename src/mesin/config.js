@@ -3,19 +3,16 @@ import customSchema from "./schema.js";
 import { Fs, Dir } from "../util/file.js";
 import "dotenv/config";
 
-/* Lokasi default berkas instruksi sistem AI */
 let instruction_p = "src/mesin/instruction.md";
-/* Kunci API Gemini yang diambil dari variabel lingkungan */
 let apiKey = process.env.API_KEY_GEMINI;
 
-/* Fungsi inisialisasi untuk konfigurasi model bahasa besar (LLM) */
 function LLM() {
   try {
-    /* Membaca instruksi sistem dari berkas markdown */
+    /* Memanggil fungsi pembaca berkas (IO CRUD) dari file utilitas */
     const instruction = Fs.baca(instruction_p, "");
-    /* Membuat instance client Google Gen AI */
+    /* Memanggil konstruktor GoogleGenAI dari pustaka eksternal */
     const AI = new GoogleGenAI({ apiKey });
-    /* Membuat konfigurasi sesi obrolan model AI */
+    /* Memanggil metode pembuatan chat dari instance GoogleGenAI */
     const model = AI.chats.create({
       model: process.env.MODEL,
       config: {
@@ -39,7 +36,6 @@ function LLM() {
     });
     return { model, AI };
   } catch (err) {
-    /* Menangani kegagalan inisialisasi konfigurasi LLM */
     throw new Error(`LLM: ${err.message}`);
   }
 }

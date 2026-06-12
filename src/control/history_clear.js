@@ -3,26 +3,28 @@ import Masukan from "../util/masukan.js";
 import History from "../service/history.js";
 import history_p from "../util/lokasi.js";
 
-/* Fungsi untuk membersihkan seluruh riwayat obrolan dengan model AI */
 function history_clear() {
   try {
-    /* Mendapatkan data riwayat model saat ini */
+    /* Memanggil fungsi pembaca riwayat dari file service */
     const h = History.get(history_p.historyModel, "[]");
-    /* Memeriksa apakah ada data riwayat yang tersimpan */
+    /* Memeriksa kondisi jika riwayat tidak kosong */
     if (h.length !== 0) {
+      /* Memanggil fungsi pembersihan layar dari file utilitas */
       Print.clear("total history: ", h.length / 2);
-      /* Meminta konfirmasi dari pengguna sebelum menghapus */
+      /* Memanggil fungsi pemilihan opsi masukan dari file utilitas */
       const confirm = Masukan.pilih("hapus data history?> ", ["y", "n"]);
+      /* Memeriksa kondisi jika pengguna setuju untuk menghapus */
       if (confirm === "y") {
-        /* Menyimpan array kosong untuk menghapus riwayat */
+        /* Memanggil fungsi penyimpan riwayat (IO CRUD) dari file service */
         History.save(history_p.historyModel, []);
+        /* Memanggil fungsi pembersihan layar dari file utilitas */
         Print.clear("history success terhapus...");
       }
     } else {
+      /* Memanggil fungsi pembersihan layar dari file utilitas */
       Print.clear("tidak ada history!!!");
     }
   } catch (err) {
-    /* Menangani error pada proses pembersihan riwayat */
     throw new Error(`history_clear: ${err.message}`);
   }
 }

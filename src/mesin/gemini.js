@@ -4,47 +4,50 @@ import Masukan from "../util/masukan.js";
 import History from "../service/history.js";
 import history_p from "../util/lokasi.js";
 
-/* Fungsi utama untuk mengirim pesan ke API Gemini dan mengelola umpan balik */
 async function mesinCall(prompt) {
   try {
-    /* Melakukan inisialisasi model dan client AI */
+    /* Memanggil fungsi konfigurasi model LLM dari file config */
     let { model, AI } = LLM();
     let message = prompt;
-    /* Mengambil riwayat percakapan sebelumnya dari berkas riwayat */
+    /* Memanggil fungsi pembaca riwayat dari file service */
     const h = History.get(history_p.historyModel, "[]");
+    /* Memeriksa kondisi jika panjang riwayat percakapan tidak kosong */
     if (h.length !== 0) {
+      /* Memanggil fungsi pembersihan layar dari file utilitas */
       Print.clear("total history: ", h.length / 2);
-      /* Meminta konfirmasi apakah ingin menggunakan riwayat obrolan sebelumnya */
+      /* Memanggil fungsi pemilihan opsi masukan dari file utilitas */
       const isHistory = Masukan.pilih("gunakan history?", ["y", "n"]);
+      /* Memeriksa kondisi jika pengguna memilih untuk menggunakan riwayat */
       if (isHistory === "y") {
-        /* Mengambil 4 pesan terakhir dari riwayat obrolan */
         model.history = h.slice(-4);
       }
     }
-    /* Loop interaktif untuk mengirimkan pesan dan menerima revisi hasil */
+    /* Melakukan perulangan untuk alur percakapan interaktif dengan model AI */
     while (true) {
+      /* Memanggil fungsi pembersihan layar dari file utilitas */
       Print.clear("gawena sedang mengerjakan...");
-      /* Mengirimkan pesan prompt ke model Gemini */
+      /* Memanggil metode sendMessage dari model AI untuk mendapatkan respons */
       const response = await model.sendMessage({ message });
       const result = response.text;
-      /* Membaca hasil JSON terstruktur dari respons AI */
       const { project, delets, laporan } = JSON.parse(result);
+      /* Memanggil fungsi pembersihan layar dari file utilitas */
       Print.clear("laporan tugas:n", laporan);
-      /* Menyimpan riwayat percakapan yang baru ke berkas riwayat */
+      /* Memanggil fungsi penyimpan riwayat (IO CRUD) dari file service */
       History.save(history_p.historyModel, model.history);
-      /* Menawarkan revisi hasil apabila output belum sesuai harapan */
+      /* Memanggil fungsi pemilihan opsi masukan dari file utilitas */
       const next = Masukan.pilih("refisi kembali hasil?", ["y", "n"]);
+      /* Memeriksa kondisi jika pengguna ingin melakukan revisi */
       if (next === "y") {
+        /* Memanggil fungsi masukan wajib dari file utilitas */
         const refisi = Masukan.wajib("apa yang ingin direvisi?> ");
         message = `konteknya refisi tugasmu:  ${refisi}`;
         continue;
       }
-      /* Menyimpan cadangan output mentah terakhir */
+      /* Memanggil fungsi penyimpan riwayat (IO CRUD) dari file service untuk keluaran */
       History.save(history_p.output, JSON.parse(result));
       return { project, delets };
     }
   } catch (err) {
-    /* Menangani error selama proses pemanggilan mesin AI */
     throw new Error(`mesinCall: ${err.message}`);
   }
 }

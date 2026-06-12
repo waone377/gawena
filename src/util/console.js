@@ -1,9 +1,8 @@
-/* Kelas utilitas bantu pembantu untuk pencetakan teks pada konsol/terminal */
 class Console {
-  /* Membersihkan tampilan layar terminal lalu mencetak pesan barunya */
   static clear(...message) {
     console.clear();
     let msg;
+    /* Memeriksa kondisi jika ada argumen pesan yang diberikan */
     if (message.length > 0) {
       msg = message.join(" ");
     } else {
@@ -12,9 +11,9 @@ class Console {
     console.log(msg);
   }
 
-  /* Mencetak pesan log biasa ke terminal diikuti dengan baris baru */
   static log(...message) {
     let msg;
+    /* Memeriksa kondisi jika ada argumen pesan yang diberikan */
     if (message.length > 0) {
       msg = message.join("");
     } else {

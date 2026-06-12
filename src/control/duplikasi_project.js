@@ -10,62 +10,71 @@ import targeter from "../service/target.js";
 import path from "path";
 import history_p from "../util/lokasi.js";
 
-/* Fungsi utama untuk menduplikasi dan memodifikasi proyek yang ada */
 async function duplikasi_project() {
   try {
-    /* Membaca riwayat target proyek yang pernah diduplikasi */
+    /* Memanggil fungsi pembaca target proyek dari file service */
     const target = targeter();
-
-    /* Mendapatkan lokasi absolut direktori target */
+    /* Memanggil fungsi konversi lokasi absolut dari file service */
     const repo = cwd(target);
-    /* Membaca struktur direktori target ke bentuk format markdown */
+    /* Memanggil fungsi pembaca struktur direktori dari file service */
     const markdown = directory(repo);
-    /* Mengonfirmasi penggunaan prompt dari file eksternal */
+    /* Memanggil fungsi konfirmasi prompt dari file service */
     const p = promptConfirm();
     let prompt = p.text;
-    /* Jika tidak menggunakan prompt.txt, meminta input dari pengguna */
+    /* Memeriksa kondisi jika berkas prompt tidak disetujui */
     if (!p.cek) {
+      /* Memanggil fungsi masukan wajib dari file utilitas */
       prompt = Masukan.wajib("apa yang ingin dimodifikasi pada project?> ");
     }
-    /* Mengonstruksi instruksi akhir untuk dikirimkan ke mesin AI */
     prompt =
       "konteksnya menduplikasi tugasmu: '" +
       prompt.trim() +
       "'\nberikut project yang diduplikasinya silahkan:\n" +
       markdown;
-    /* Memanggil mesin AI untuk menghasilkan struktur proyek baru */
+    /* Memanggil fungsi mesin AI dari file mesin untuk menduplikasi proyek */
     const { project, delets } = await mesinCall(prompt);
-    /* Meminta nama direktori output baru dari pengguna */
+    /* Memanggil fungsi masukan wajib dari file utilitas untuk nama proyek baru */
     const dir_out = Masukan.wajib("masukan nama project baru?> ");
+    /* Memanggil fungsi pembersihan layar dari file utilitas */
     Print.clear("sedang menduplikasi project...");
-    /* Membuat seluruh struktur berkas dan folder hasil duplikasi */
+    /* Melakukan perulangan untuk memproses setiap entitas proyek yang diduplikasi */
     for (const eee of project) {
       const lokasi = path.join("output", dir_out, eee.lokasi);
+      /* Memeriksa kondisi berdasarkan jenis entitas proyek */
       switch (eee.jenis) {
         case "folder":
+          /* Memanggil fungsi pembuatan direktori (IO CRUD) dari file utilitas */
           Dir.buat(lokasi);
+          /* Memanggil fungsi pencetakan log dari file utilitas */
           Print.log(eee.jenis, " ", lokasi, " success created");
           break;
         case "config":
+          /* Memanggil fungsi penulisan berkas (IO CRUD) dari file utilitas */
           Fs.tulis(lokasi, eee.konten);
+          /* Memanggil fungsi pencetakan log dari file utilitas */
           Print.log(eee.jenis, " ", lokasi, " success created");
           break;
         case "file":
+          /* Memanggil fungsi penulisan berkas (IO CRUD) dari file utilitas */
           Fs.tulis(lokasi, eee.konten);
+          /* Memanggil fungsi pencetakan log dari file utilitas */
           Print.log(eee.jenis, " ", lokasi, " success created");
           break;
         case "dok":
+          /* Memanggil fungsi penulisan berkas (IO CRUD) dari file utilitas */
           Fs.tulis(lokasi, eee.konten);
+          /* Memanggil fungsi pencetakan log dari file utilitas */
           Print.log(eee.jenis, " ", lokasi, " success created");
           break;
         default:
+          /* Memanggil fungsi pencetakan log dari file utilitas */
           Print.log(eee.jenis, " ", lokasi, " failed created!");
           break;
       }
     }
+    /* Memanggil fungsi pencetakan log dari file utilitas */
     Print.log("duplikasi project success...");
   } catch (err) {
-    /* Menangani kesalahan eksekusi duplikasi */
     throw new Error(err.message);
   }
 }

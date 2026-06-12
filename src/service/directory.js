@@ -7,39 +7,46 @@ import History from "../service/history.js";
 import history_p from "../util/lokasi.js";
 import getIgnored from "./ignored.js";
 
-/* Fungsi internal untuk memindai berkas-berkas proyek serta mengonfigurasi filter abaikan */
 function getPath(target) {
   try {
-    /* memanggil untuk menanyakan dan mengecek riwayat ignore config */
+    /* Memanggil fungsi pengambil daftar berkas pengecualian dari file service */
     const { h, confirm, ignored } = getIgnored(target);
     let ignore = ["**/*.mp3", "node_modules/**", ".git/**", "dist/**"];
-    /* cek konfirmasi apakah ingin menggunakan riwayat */
+    /* Memeriksa kondisi jika pengguna memilih untuk mengonfigurasi pengecualian baru */
     if (confirm === "n") {
+      /* Memanggil fungsi pembersihan layar dari file utilitas */
       Print.clear("masukan berkas yang ingin dikecualikan:");
+      /* Memanggil fungsi pencetakan log dari file utilitas */
       Print.log("format untuk folder: node_modules/**");
+      /* Memanggil fungsi pencetakan log dari file utilitas */
       Print.log("format untuk file: **/example.zip");
+      /* Memanggil fungsi pencetakan log dari file utilitas */
       Print.log("format untuk extensi: **/*.txt");
+      /* Memanggil fungsi pencetakan log dari file utilitas */
       Print.log("pisahkan dengan koma(,)");
+      /* Memanggil fungsi pencetakan log dari file utilitas */
       Print.log("contoh: node_modules/**, **/compres.zip, **/*.mp3");
+      /* Memanggil fungsi pencetakan log dari file utilitas */
       Print.log("kosongkan jika tidak ada");
-      /* Mengambil daftar berkas/folder pengecualian dari input pengguna */
+      /* Memanggil fungsi masukan biasa dari file utilitas */
       const berkasUsr = Masukan.biasa("silakan?> ");
+      /* Memeriksa kondisi jika pengguna memberikan input */
       if (berkasUsr) {
         const berkasArray = berkasUsr
           .split(",")
           .map((e) => e.trim())
           .filter(Boolean);
-        /* mendapatkan index sesuai targetnya */
+        /* Memanggil metode findIndex untuk mencari indeks target */
         const index = h.findIndex((e) => e.target === target);
         h[index] = { target, ignored: berkasArray };
-        /* menyimpan config ke riwayat*/
+        /* Memanggil fungsi penyimpan riwayat (IO CRUD) dari file service */
         History.save(history_p.ignore, h);
         ignore = [...ignore, ...berkasArray];
       }
     } else {
       ignore = [...ignore, ...ignored];
     }
-    /* Melakukan pencarian berkas menggunakan pustaka fast-glob */
+    /* Memanggil fungsi pencarian berkas sinkron dari pustaka fast-glob */
     const paths = fg.sync("**/*", {
       cwd: target.replace("/music", "/Music"),
       ignore: ignore,
@@ -48,16 +55,16 @@ function getPath(target) {
     });
     return paths;
   } catch (err) {
-    /* Menangani kesalahan pemindaian path direktori */
     throw new Error(`getPath: ${err.message}`);
   }
 }
 
-/* Fungsi internal untuk menyimpan berkas-berkas proyek asli ke cadangan JSON */
 function repositoryJson(paths, target) {
-  /* Memetakan setiap jalur berkas menjadi objek representasi file proyek */
+  /* Melakukan perulangan pemetaan untuk membaca setiap berkas */
   const code = paths.map((e) => {
+    /* Memanggil fungsi pemotong lokasi relatif dari file service */
     const lokasi = potong(target, e);
+    /* Memanggil fungsi pembaca berkas (IO CRUD) dari file utilitas */
     const value = Fs.baca(e, "");
     return { jenis: "file", lokasi: lokasi, konten: value };
   });
@@ -67,41 +74,42 @@ function repositoryJson(paths, target) {
     delets: [],
     laporan: "",
   };
-  /* Menyimpan struktur objek proyek ke dalam database riwayat JSON */
+  /* Memanggil fungsi penyimpan riwayat (IO CRUD) dari file service */
   History.save(history_p.projectJson, project);
 }
 
-/* Fungsi internal untuk menyatukan daftar isi berkas menjadi teks markdown tunggal */
 function repositoryMD(target, source) {
   const head = `\project lokasi: ${target}\n### source code:\n`;
   const md_array = [head, ...source];
   const markdown = md_array.join("-----\n");
-  /* Menulis dokumen markdown gabungan kode sumber */
+  /* Memanggil fungsi penulisan berkas (IO CRUD) dari file utilitas */
   Fs.tulis(history_p.projectMarkdown, markdown.trim());
   return markdown.trim();
 }
 
-/* Fungsi utama untuk membaca seluruh berkas dari direktori proyek target */
 function directory(target) {
   try {
-    /* Mendapatkan seluruh daftar berkas yang disaring */
+    /* Memanggil fungsi pengambil daftar berkas dari file lokal */
     const paths = getPath(target);
+    /* Memanggil fungsi pembersihan layar dari file utilitas */
     Print.clear("sedang membaca directory...");
-    /* Membaca konten teks dari masing-masing berkas */
+    /* Melakukan perulangan pemetaan untuk memproses konten setiap berkas */
     const source = paths.map((e) => {
+      /* Memanggil fungsi pemotong lokasi relatif dari file service */
       const lokasi = potong(target, e);
+      /* Memanggil fungsi pencetakan log dari file utilitas */
       Print.log("membaca ", lokasi);
       const extensi = lokasi.split(".")[1];
+      /* Memanggil fungsi pembaca berkas (IO CRUD) dari file utilitas */
       const value = Fs.baca(e, "");
       return `lokasi:\n${lokasi}\n\`\`\`${extensi}\n${value}\`\`\` `;
     });
-    /* Menyimpan file cadangan JSON proyek */
+    /* Memanggil fungsi internal untuk membuat representasi JSON */
     repositoryJson(paths, target);
-    /* Membuat serta mengembalikan representasi kode sumber dalam markdown */
+    /* Memanggil fungsi internal untuk membuat representasi Markdown */
     const markdown = repositoryMD(target, source);
     return markdown;
   } catch (err) {
-    /* Menangani error saat proses pemindaian direktori */
     throw new Error(`directory: ${err.message}`);
   }
 }
