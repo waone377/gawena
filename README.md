@@ -40,16 +40,12 @@ Sebelum menjalankan Gawena, pastikan Anda telah menginstal:
 Gawena memerlukan beberapa variabel lingkungan untuk beroperasi, terutama kunci API Google Gemini Anda. Buat file `.env` di direktori root proyek (jika belum ada) dan tambahkan konfigurasi berikut:
 
 ```env
-# Ganti dengan kunci API Gemini Anda yang sebenarnya
-API_KEY_GEMINI="YOUR_GEMINI_API_KEY"
+API_KEY_GEMINI=?
+MODEL=gemini-3.5-flash
+TEMPERATURE=0.9
+PEMIKIRAN=25000
+MAX_OUTPUT=50000
 
-# Model yang digunakan (sesuaikan jika perlu)
-MODEL="gemini-1.5-flash-latest"
-
-# Parameter konfigurasi model
-TEMPERATURE="0.7"
-PEMIKIRAN="10000" # Dalam token
-MAX_OUTPUT="8192"
 ```
 
 ## Penggunaan

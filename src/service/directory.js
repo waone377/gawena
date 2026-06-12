@@ -5,26 +5,39 @@ import Masukan from "../util/masukan.js";
 import { cwd, potong } from "../service/lokasi.js";
 import History from "../service/history.js";
 import history_p from "../util/lokasi.js";
+import getIgnored from "./ignored.js";
 
 /* Fungsi internal untuk memindai berkas-berkas proyek serta mengonfigurasi filter abaikan */
 function getPath(target) {
   try {
-    Print.clear("masukan berkas yang ingin dikecualikan:");
-    Print.log("format untuk folder: node_modules/**");
-    Print.log("format untuk file: **/example.zip");
-    Print.log("format untuk extensi: **/*.txt");
-    Print.log("pisahkan dengan koma(,)");
-    Print.log("contoh: node_modules/**, **/compres.zip, **/*.mp3");
-    Print.log("kosongkan jika tidak ada");
-    /* Mengambil daftar berkas/folder pengecualian dari input pengguna */
-    const berkasUsr = Masukan.biasa("silakan?> ");
+    /* memanggil untuk menanyakan dan mengecek riwayat ignore config */
+    const { h, confirm, ignored } = getIgnored(target);
     let ignore = ["**/*.mp3", "node_modules/**", ".git/**", "dist/**"];
-    if (berkasUsr) {
-      const berkasArray = berkasUsr
-        .split(",")
-        .map((e) => e.trim())
-        .filter(Boolean);
-      ignore = [...ignore, ...berkasArray];
+    /* cek konfirmasi apakah ingin menggunakan riwayat */
+    if (confirm === "n") {
+      Print.clear("masukan berkas yang ingin dikecualikan:");
+      Print.log("format untuk folder: node_modules/**");
+      Print.log("format untuk file: **/example.zip");
+      Print.log("format untuk extensi: **/*.txt");
+      Print.log("pisahkan dengan koma(,)");
+      Print.log("contoh: node_modules/**, **/compres.zip, **/*.mp3");
+      Print.log("kosongkan jika tidak ada");
+      /* Mengambil daftar berkas/folder pengecualian dari input pengguna */
+      const berkasUsr = Masukan.biasa("silakan?> ");
+      if (berkasUsr) {
+        const berkasArray = berkasUsr
+          .split(",")
+          .map((e) => e.trim())
+          .filter(Boolean);
+        /* mendapatkan index sesuai targetnya */
+        const index = h.findIndex((e) => e.target === target);
+        h[index] = { target, ignored: berkasArray };
+        /* menyimpan config ke riwayat*/
+        History.save(history_p.ignore, h);
+        ignore = [...ignore, ...berkasArray];
+      }
+    } else {
+      ignore = [...ignore, ...ignored];
     }
     /* Melakukan pencarian berkas menggunakan pustaka fast-glob */
     const paths = fg.sync("**/*", {

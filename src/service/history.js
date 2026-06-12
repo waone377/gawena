@@ -30,20 +30,7 @@ class History {
       }
       const isi = fs.readFileSync(p, "utf-8");
       const parse = JSON?.parse(isi) || null;
-      let back = parse;
-      /* Jika status target riwayat diset aktif, konfirmasi pengguna untuk memakainya */
-      if (parse.set) {
-        Print.clear("ada riwayat:");
-        console.dir(parse);
-        const confirm = Masukan.pilih("gunakan itu?", ["y", "n"]);
-        if (confirm === "y") {
-          back = parse;
-        } else {
-          parse.set = false;
-          back = parse;
-        }
-      }
-      return back;
+      return parse;
     } catch (err) {
       throw new Error(`baca history gagal: ${err.message}`);
     }

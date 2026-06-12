@@ -14,14 +14,8 @@ import history_p from "../util/lokasi.js";
 async function duplikasi_project() {
   try {
     /* Membaca riwayat target proyek yang pernah diduplikasi */
-    const h = History.get(history_p.duplikasi, { set: false, target: "" });
-    let target = h.target;
-    /* Jika tidak ada riwayat, meminta target baru dari pengguna */
-    if (!h.set) {
-      target = targeter();
-    }
-    /* Menyimpan riwayat target saat ini */
-    History.save(history_p.duplikasi, { set: true, target });
+    const target = targeter();
+
     /* Mendapatkan lokasi absolut direktori target */
     const repo = cwd(target);
     /* Membaca struktur direktori target ke bentuk format markdown */

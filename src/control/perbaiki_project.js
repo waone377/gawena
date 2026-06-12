@@ -13,14 +13,7 @@ import history_p from "../util/lokasi.js";
 async function perbaiki_project() {
   try {
     /* Memeriksa riwayat target proyek yang pernah diperbaiki sebelumnya */
-    const h = History.get(history_p.perbaiki, { set: false, target: "" });
-    let target = h.target;
-    /* Jika belum diset, meminta direktori target baru dari pengguna */
-    if (!h.set) {
-      target = targeter();
-    }
-    /* Menyimpan status target proyek ke riwayat */
-    History.save(history_p.perbaiki, { set: true, target });
+    const target = targeter();
     /* Mendapatkan path absolut dari proyek target */
     const repo = cwd(target);
     /* Membaca direktori target ke format teks markdown */

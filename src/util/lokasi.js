@@ -2,8 +2,7 @@
 const history_p = {
   projectJson: "history/project/project.json",
   projectMarkdown: "history/project/project.md",
-  perbaiki: "history/target/perbaiki.json",
-  duplikasi: "history/target/duplikasi.json",
+  target: "history/target.json",
   ignore: "history/ignore.json",
   historyModel: "history/history.json",
   output: "history/output.json",
