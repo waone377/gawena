@@ -1,1 +1,5 @@
-buatlah server api dengan golang
+tambahkan elemen navbar brand diatas dengan brand teks "mercekah" menu bar sebelah kiri dengan item link dua item yaitu: robot yang mengarah ke https://ai377.vercel.app dan pencatuan ke https://catu377.vercel.app
+untuk defaultnya menubar disembunyikan dulu ketika klik menu baru muncul list itemnya
+navbar berwarna biru dan teks serta icon menu semua putih
+dan gaya teks brand italic
+gunakan class bootstrap sepenuhnya

@@ -38,9 +38,16 @@ function getPath(target) {
           .filter(Boolean);
         /* Memanggil metode findIndex untuk mencari indeks target */
         const index = h.findIndex((e) => e.target === target);
-        h[index] = { target, ignored: berkasArray };
+        let save = h;
+        /* cek index ditemukan atau tidak */
+        if (index === -1) {
+          save = h.shift({ target, ignored: berkasArray });
+        } else {
+          h[index] = { target, ignored: berkasArray };
+          save = h;
+        }
         /* Memanggil fungsi penyimpan riwayat (IO CRUD) dari file service */
-        History.save(history_p.ignore, h);
+        History.save(history_p.ignore, save);
         ignore = [...ignore, ...berkasArray];
       }
     } else {
